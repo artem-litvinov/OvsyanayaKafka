@@ -1,0 +1,29 @@
+version: '3'
+services:
+  producer:
+    build: ./producer
+    depends_on:
+      - kafka
+    links:
+      - kafka
+    ports:
+      - "9092"
+  consumer:
+    build: ./consumer
+    depends_on:
+      - kafka
+    links:
+      - kafka
+    ports:
+      - "9092"
+  kafka:
+    image: spotify/kafka
+    environment:
+      - ADVERTISED_HOST=localhost
+      - ADVERTISED_PORT=9092
+    ports:
+      - "2181"
+      - "9092"
+    expose:
+      - "2181"
+      - "9092"
