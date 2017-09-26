@@ -4,4 +4,5 @@ WORKDIR /app
 ADD . /app
 
 RUN pip install kafka-python
-CMD ['start.sh']
+RUN python init_consumer.py &
+RUN python init_producer.py
