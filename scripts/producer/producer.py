@@ -24,7 +24,6 @@ class AProducer(AKafkaCommon):
         """
         if hasattr(self, 'producer'):
             try:
-                data = json.dumps(data)
                 self.producer.send(topic, json.dumps(data))
             except:
                 self.producer.send(topic, data)
