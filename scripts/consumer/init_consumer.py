@@ -1,7 +1,6 @@
 import sys
 from consumer import AConsumer
 
-#34.214.200.68
 def run():
     args = {'host': 'localhost', 'port': '9092'}
     for arg in sys.argv:

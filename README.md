@@ -11,7 +11,11 @@ Run
 
     sudo docker run -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST='EC2 IP' --env ADVERTISED_PORT=9092 --env KAFKA_HEAP_OPTS=Xms256MB,Xmx256MB spotify/kafka
 
-##Consumer
+## Consumer
 Create another EC2 instance, then run
 
-    sudo docker run -p 9092:9092 akvelon/kafka_consumer
+    sudo docker run -it artlitvinov/akvelon:kafka_consumer
+
+## Producer
+Run
+    python init_producer.py
