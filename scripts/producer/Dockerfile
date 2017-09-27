@@ -4,4 +4,4 @@ WORKDIR /app
 ADD . /app
 
 RUN pip install kafka-python
-RUN python init_producer.py
+CMD ["python", "init_producer.py", "port=9092", "host=34.214.200.68"]

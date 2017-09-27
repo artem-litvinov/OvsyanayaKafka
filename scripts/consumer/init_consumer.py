@@ -11,4 +11,5 @@ def run():
     a_consumer = AConsumer(args['host'], args['port'])
     a_consumer.listen('test-topic')
 
-run()
+if __name__ == "__main__":
+    run()
