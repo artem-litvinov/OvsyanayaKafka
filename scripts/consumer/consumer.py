@@ -1,7 +1,12 @@
+import sys
+sys.path.append('./thrift')
 import json
 import time
-from kafka import KafkaConsumer
 
+from kafka import KafkaConsumer
+from kafka_data.ttypes import Kafka_Data
+
+from thrift.TSerialization import deserialize
 
 class AConsumer():
     def __init__(self, host='localhost', port='9092'):
@@ -26,7 +31,10 @@ class AConsumer():
             self.consumer.subscribe(topic)
             for msg in self.consumer:
                 try:
-                    print json.loads(msg.value)
+                    data = Kafka_Data()
+                    deserialize(data, msg.value)
+                    
+                    print data
                 except:
                     print msg.value
         else:

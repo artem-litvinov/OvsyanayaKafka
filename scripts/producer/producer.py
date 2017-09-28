@@ -1,7 +1,14 @@
+import sys
+sys.path.append('./thrift')
 import json
 import time
-from kafka import KafkaProducer
 
+from kafka import KafkaProducer
+from kafka_data.ttypes import Kafka_Data
+
+from thrift.TSerialization import serialize
+# from thrift.protocol import TBinaryProtocol
+# from thrift.transport import TTransport
 
 class AProducer():
     def __init__(self, host='localhost', port='9092'):
@@ -24,7 +31,14 @@ class AProducer():
     def send(self, topic, data):
         if hasattr(self, 'producer'):
             try:
-                self.producer.send(topic, json.dumps(data))
+                serialized_data = serialize(data)
+
+                # transportOut = TTransport.TMemoryBuffer()
+                # protocolOut = TBinaryProtocol.TBinaryProtocol(transportOut)
+                # data.write(protocolOut)
+                # bytes = transportOut.getvalue()
+
+                self.producer.send(topic, serialized_data)
             except:
                 self.producer.send(topic, data)
         else:
