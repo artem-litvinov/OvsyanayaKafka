@@ -20,7 +20,7 @@ class AConsumer():
 
     def __connect(self, cb, topic):
         try:
-            self.consumer = KafkaConsumer(bootstrap_servers=self.server())
+            self.consumer = KafkaConsumer(bootstrap_servers=self.__server())
             cb(topic)
         except:
             time.sleep(1000)
@@ -34,7 +34,7 @@ class AConsumer():
             self.consumer.subscribe(topic)
             for msg in self.consumer:
                 try:
-                    print json.loads(msg.value)
+                    print json.loads(msg.value)["message"]
                 except:
                     print msg.value
         else:

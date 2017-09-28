@@ -3,16 +3,37 @@ from producer import AProducer
 
 
 def run():
+    mocks = [
+        {
+            'type': 'phone',
+            'contact': '+79997305889',
+            'message': 'test message from space to m0sk1t phone'
+        },
+        {
+            'type': 'mail',
+            'contact': 'm0sk1t@bk.ru',
+            'message': 'test message from space to m0sk1t mail'
+        },
+        {
+            'type': 'phone',
+            'contact': '+79158334170',
+            'message': 'test message from space to artlitvinov phone'
+        },
+        {
+            'type': 'mail',
+            'contact': 'work.litvinov.artem@gmail.com',
+            'message': 'test message from space to artlitvinov mail'
+        }
+    ]
     args = {'host': 'localhost', 'port': '9092'}
     for arg in sys.argv:
         entry = arg.split("=")
         if len(entry) == 2:
             args[str(entry[0])] = str(entry[1])
     a_producer = AProducer(args['host'], args['port'])
-    while True:
+    for message in mocks:
         try:
-            data = raw_input('enter your data: ')
-            a_producer.send('test-topic', data)
+            a_producer.send('test-topic', message)
         except EOFError:
             pass
 
