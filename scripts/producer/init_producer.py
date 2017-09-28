@@ -32,10 +32,7 @@ def run():
             args[str(entry[0])] = str(entry[1])
     a_producer = AProducer(args['host'], args['port'])
     for message in mocks:
-        try:
-            a_producer.send('test-topic', message)
-        except EOFError:
-            pass
+        a_producer.send('test-topic', message)
 
 
 if __name__ == "__main__":
