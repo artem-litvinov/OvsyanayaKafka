@@ -1,6 +1,11 @@
+import sys
 import json
 import time
+
 from kafka import KafkaProducer
+sys.path.append('./thrift')
+from kafka_data.ttypes import Kafka_Data
+from thrift.TSerialization import serialize
 
 
 class AProducer():
@@ -24,7 +29,8 @@ class AProducer():
     def send(self, topic, data):
         if hasattr(self, 'producer'):
             try:
-                self.producer.send(topic, json.dumps(data))
+                serialized_data = serialize(data)
+                self.producer.send(topic, serialized_data)
             except:
                 self.producer.send(topic, data)
         else:

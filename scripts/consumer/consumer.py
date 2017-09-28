@@ -1,9 +1,13 @@
+import sys
 import json
 import time
 import boto3
 
 from kafka import KafkaConsumer
+sys.path.append('./thrift')
+from kafka_data.ttypes import Kafka_Data
 
+from thrift.TSerialization import deserialize
 
 class AConsumer():
     def __init__(self, host='localhost', port='9092'):
@@ -36,7 +40,9 @@ class AConsumer():
             topic_arn = self.client.create_topic(Name=topic)['TopicArn']
             for msg in self.consumer:
                 try:
-                    message = json.loads(msg.value)
+                    data = Kafka_Data()
+                    deserialize(data, msg.value)
+                    message = json.loads(data)
                     print message
                     self.client.subscribe(
                         TopicArn=topic_arn,
@@ -49,6 +55,8 @@ class AConsumer():
                     )
                 except BaseException as e:
                     print e
+                    print data
+                except:
                     print msg.value
         else:
             self.__connect(self.listen, topic)
