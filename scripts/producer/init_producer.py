@@ -1,6 +1,7 @@
 import sys
 from producer import AProducer
 
+
 def run():
     args = {'host': 'localhost', 'port': '9092'}
     for arg in sys.argv:
@@ -14,6 +15,7 @@ def run():
             a_producer.send('test-topic', data)
         except EOFError:
             pass
+
 
 if __name__ == "__main__":
     run()

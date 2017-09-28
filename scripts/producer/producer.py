@@ -1,27 +1,26 @@
 import json
 import time
 from kafka import KafkaProducer
-from kafka_common import AKafkaCommon
 
-class AProducer(AKafkaCommon):
-    """
-    Kafka producer
-    """
-    def __init__(self, host = 'localhost', port = '9092', *args, **kwargs):
-        super(AProducer, self).__init__(host, port, *args, **kwargs)
+
+class AProducer():
+    def __init__(self, host='localhost', port='9092'):
+        self.__host = host
+        self.__port = port
+        print "running on host: ", self.__host, ", ", "port: ", self.__port
+
+    def __server(self):
+        return self.__host + ':' + self.__port
 
     def __connect(self, cb, topic, data):
         try:
-            self.producer = KafkaProducer(bootstrap_servers = self.server())
+            self.producer = KafkaProducer(bootstrap_servers=self.__server())
             cb(topic, data)
         except:
             time.sleep(1000)
             self.__connect(cb, topic, data)
 
     def send(self, topic, data):
-        """
-        Sends data to topic
-        """
         if hasattr(self, 'producer'):
             try:
                 self.producer.send(topic, json.dumps(data))

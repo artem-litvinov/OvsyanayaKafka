@@ -1,18 +1,26 @@
 import json
 import time
 from kafka import KafkaConsumer
-from kafka_common import AKafkaCommon
 
-class AConsumer(AKafkaCommon):
+
+class AConsumer():
     """
     Kafka consumer
     """
-    def __init__(self, host = 'localhost', port = '9092', *args, **kwargs):
-        super(AConsumer, self).__init__(host, port, *args, **kwargs)
+    def __init__(self, host='localhost', port='9092'):
+        self.__host = host
+        self.__port = port
+        print "running on host: ", self.__host, ", ", "port: ", self.__port
+
+    def __server(self):
+        """
+        Server instance string
+        """
+        return self.__host + ':' + self.__port
 
     def __connect(self, cb, topic):
         try:
-            self.consumer = KafkaConsumer(bootstrap_servers = self.server())
+            self.consumer = KafkaConsumer(bootstrap_servers=self.server())
             cb(topic)
         except:
             time.sleep(1000)
