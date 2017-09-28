@@ -17,7 +17,7 @@ class AConsumer():
             print "connected to host: ", self.__host, ", ", "port: ", self.__port
             cb(topic)
         except:
-            time.sleep(1000)
+            time.sleep(1)
             print "connecting..."
             self.__connect(cb, topic)
 

@@ -1,4 +1,6 @@
 import sys
+import time
+import random
 from producer import AProducer
 
 
@@ -31,8 +33,16 @@ def run():
         if len(entry) == 2:
             args[str(entry[0])] = str(entry[1])
     a_producer = AProducer(args['host'], args['port'])
-    for message in mocks:
+'''
+     for message in mocks:
+        time.sleep(1)
         a_producer.send('test-topic', message)
+'''
+
+    while True:
+        time.sleep(1)
+        a_producer.send('test-topic', mocks[random.randint(0, 3)])
+
 
 
 if __name__ == "__main__":
