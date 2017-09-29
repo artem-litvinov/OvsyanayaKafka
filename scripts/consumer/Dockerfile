@@ -5,6 +5,7 @@ ADD . /app
 
 RUN pip install boto3
 RUN pip install kafka-python
+RUN pip install cassandra-driver
 RUN apt-get update
 
 RUN apt-get install wget -y
