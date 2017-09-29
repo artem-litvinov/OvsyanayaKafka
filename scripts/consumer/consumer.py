@@ -4,9 +4,8 @@ import time
 import boto3
 
 from kafka import KafkaConsumer
-sys.path.append('./thrift')
+sys.path.append('./thrift-gen')
 from kafka_data.ttypes import Kafka_Data
-
 from thrift.TSerialization import deserialize
 
 class AConsumer():
@@ -42,16 +41,15 @@ class AConsumer():
                 try:
                     data = Kafka_Data()
                     deserialize(data, msg.value)
-                    message = json.loads(data)
-                    print message
+                    print data
                     self.client.subscribe(
                         TopicArn=topic_arn,
-                        Protocol=message["proto"],
-                        Endpoint=message["contact"]
+                        Protocol=data.type,
+                        Endpoint=data.contact
                     )
                     print self.client.publish(
                         TopicArn=topic_arn,
-                        Message=message["message"]
+                        Message=data.message
                     )
                 except BaseException as e:
                     print e

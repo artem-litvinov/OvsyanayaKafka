@@ -3,7 +3,7 @@ import json
 import time
 
 from kafka import KafkaProducer
-sys.path.append('./thrift')
+sys.path.append('./thrift-gen')
 from kafka_data.ttypes import Kafka_Data
 from thrift.TSerialization import serialize
 
