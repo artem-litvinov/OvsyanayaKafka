@@ -2,11 +2,13 @@ import sys
 import json
 import time
 import boto3
+import thread
 
 from kafka import KafkaConsumer
 sys.path.append('./thrift-gen')
 from kafka_data.ttypes import Kafka_Data
 from thrift.TSerialization import deserialize
+from cassandra.cluster import Cluster
 
 class AConsumer():
     def __init__(self, host='localhost', port='9092'):
@@ -19,12 +21,9 @@ class AConsumer():
     def __connect(self, cb, topic):
         try:
             self.consumer = KafkaConsumer(bootstrap_servers=self.__server())
-            self.client = boto3.client(
-                "sns",
-                aws_access_key_id="AKIAI7ANTPLUGZATSHOQ",
-                aws_secret_access_key="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",
-                region_name="us-west-2"
-            )
+            self.__client = boto3.client("sns")
+            cluster = Cluster(['localhost']) #'35.162.115.250'
+            self.session = cluster.connect('users')
             print "connected to host: ", self.__host, ", ", "port: ", self.__port
             cb(topic)
         except BaseException as e:
@@ -36,25 +35,27 @@ class AConsumer():
     def listen(self, topic):
         if hasattr(self, 'consumer'):
             self.consumer.subscribe(topic)
-            topic_arn = self.client.create_topic(Name=topic)['TopicArn']
+            self.__topic_arn = self.__client.create_topic(Name=topic)['TopicArn']
             for msg in self.consumer:
                 try:
-                    data = Kafka_Data()
-                    deserialize(data, msg.value)
-                    print data
-                    self.client.subscribe(
-                        TopicArn=topic_arn,
-                        Protocol=data.type,
-                        Endpoint=data.contact
-                    )
-                    print self.client.publish(
-                        TopicArn=topic_arn,
-                        Message=data.message
-                    )
+                    self.__output(msg)
+                    #thread.start_new_thread(self.__output, msg)
                 except BaseException as e:
                     print e
-                    print data
                 except:
                     print msg.value
         else:
             self.__connect(self.listen, topic)
+
+    def __output(self, msg):
+        data = Kafka_Data()
+        deserialize(data, msg.value)
+        self.session.execute('USE users')
+        rows = self.session.execute("SELECT * FROM users WHERE user_id='%s'" % (data.contact))
+        for row in rows:
+            print row.contact
+            print data.message
+            # print self.__client.publish(
+            #     TopicArn=self.__topic_arn,
+            #     Message=data.message
+            # )
