@@ -29,12 +29,11 @@ def user(id):
 
 @app.route('/user', methods=['POST'])
 def create_user():
-    req = request.json
-    print request
+    req = request.form
     session.execute('USE users')
     user_id = str(int(round(time.time() * 1000)))
-    print req
-#    session.execute("INSERT INTO users (user_id, type, contact) VALUES (%s, %s, %s)", (user_id, req["type"], req["contact"]))
+#    print req["contact"]
+    print session.execute("INSERT INTO users (user_id, type, contact) VALUES (%s, %s, %s)", (user_id, req["type"], req["contact"]))
     return user_id
 
 if __name__ == '__main__':
