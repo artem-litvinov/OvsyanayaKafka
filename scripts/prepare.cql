@@ -5,7 +5,16 @@ CREATE KEYSPACE users
     };
 
 CREATE TABLE users (
-    user_id text PRIMARY KEY,
+    uid text PRIMARY KEY,
     type text,
+    name text,
     contact text
+);
+
+CREATE TABLE messages (
+    mid text PRIMARY KEY,
+    uid text,
+    date text,
+    text text,
+    status text
 );
