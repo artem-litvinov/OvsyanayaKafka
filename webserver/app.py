@@ -9,11 +9,11 @@ session = cluster.connect('users')
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', title='Create user')
 
 @app.route('/sender')
 def sender():
-    return render_template('sender.html')
+    return render_template('sender.html', title='Send message')
 
 @app.route('/user/<id>', methods=['GET'])
 def user(id):
@@ -44,7 +44,14 @@ def create_user():
     session.execute('USE users')
     uid = str(int(round(time.time() * 1000)))
     print session.execute("INSERT INTO users (uid, name, type, contact) VALUES (%s, %s, %s, %s)", (uid, req["name"],  req["type"], req["contact"]))
-    return redirect('/sender')
+    return uid
+
+@app.route('/send', methods=['POST'])
+def send_message():
+    req = request.form
+    print req["uid"], req["message"]
+    return req["uid"], req["message"]
+
 
 if __name__ == '__main__':
     app.run(debug=True)

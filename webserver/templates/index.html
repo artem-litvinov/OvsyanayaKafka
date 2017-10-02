@@ -4,14 +4,94 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User creating</title>
-</head>
+    <title>{{title}}</title>
+    <style>
+            body {
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            h3 {
+                text-align: center;
+            }
+            p {
+                text-align: center;
+            }
+            form {
+                width: 30%;
+                padding: 1%;
+                background-color: #eee;
+                box-shadow: 3px 3px 3px #ccc;
+            }
+            input,
+            select {
+                width: 98%;
+                padding: 1%;
+            }
+            #status_text {
+                padding: 1%;
+                display: none;
+            }
+            .error {
+                border: 1px solid rgba(250, 0, 0, .3);
+                background-color: rgba(250, 0, 0, .3);
+                box-shadow: 0 0 3px rgba(200, 0, 0, .3);
+            }
+            .success {
+                border: 1px solid rgba(0, 250, 0, .3);
+                background-color: rgba(0, 250, 0, .3);
+                box-shadow: 0 0 3px 3px rgba(0, 200, 0, .3);
+            }
+        </style>
+    </head>
 <body>
-    <form action="/user" method="POST">
-        <input type="hidden" name="type" value="email">
-        <p><input type="email" name="contact" id="contact" placeholder="email"></p>
-        <p><input type="text" name="name" id="name" placeholder="name"></p>
-        <p><button type="submit">Create User</button></p>
+    <form action="/user">
+        <h3>{{title}}</h3>
+        <input type="hidden" id="type" value="email">
+        <p id="status_text"></p>
+        <p><input type="text" id="name" placeholder="User name"></p>
+        <p><input type="email" id="contact" placeholder="User email"></p>
+        <p><button type="submit">{{title}}</button></p>
     </form>
+    <script>
+        var form = document.querySelector('form');
+        var xhr = new XMLHttpRequest();
+        var status_text = document.querySelector('#status_text');
+        form.addEventListener('submit', create_user);
+        function create_user(e) {
+            e.preventDefault();
+            var form = e.target;
+            var name = form.querySelector('#name');
+            var type = form.querySelector('#type');
+            var contact = form.querySelector('#contact');
+            if (!name.value) return alert('Empty name!');
+            if (!contact.value) return alert('Empty email!');
+            var fd = new FormData();
+            fd.append('name', name.value);
+            fd.append('type', type.value);
+            fd.append('contact', contact.value);
+            xhr.open('POST','/user');
+            xhr.send(fd);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState != 4) return;
+                status_text.style.display = 'block';
+                if (xhr.status != 200) {
+                    status_text.classList.add('error');
+                    status_text.innerHTML = xhr.status + ': ' + xhr.statusText;
+                } else {
+                    status_text.classList.add('success');
+                    status_text.innerHTML = 'Created user id: ' + xhr.responseText;
+                    console.log(xhr.responseText);
+                }
+                setTimeout(function(){
+                    status_text.classList.remove('error');
+                    status_text.classList.remove('success');
+                    status_text.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
 </body>
 </html>

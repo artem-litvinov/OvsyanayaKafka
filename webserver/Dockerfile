@@ -1,5 +1,8 @@
 FROM python:2.7-slim
+
 WORKDIR /app
-ADD thrift/test.py /app
-RUN cd /app
-RUN ls
+ADD . /app
+RUN pip install flask
+RUN pip install cassandra-driver
+EXPOSE 5000
+CMD ["python", "app.py"]
