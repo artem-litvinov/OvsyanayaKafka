@@ -50,7 +50,7 @@ def create_user():
 def send_message():
     req = request.form
     print req["uid"], req["message"]
-    return req["uid"], req["message"]
+    return "%s %s" % (req["uid"], req["message"])
 
 
 if __name__ == '__main__':

@@ -29,8 +29,5 @@ class AConsumer(AKafkaCommon):
                     #thread.start_new_thread(self.__output, msg)
                 except BaseException as e:
                     print e
-                except:
-                    print msg.value
         else:
             self.__connect(self.listen, topic)
-

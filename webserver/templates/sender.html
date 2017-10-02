@@ -58,7 +58,7 @@
                     var data = JSON.parse(xhr.responseText);
                     var users = document.querySelector("#users");
                     users.innerHTML = data.map(el => [
-                            '<option value="'+el.id+'">',
+                            '<option value="'+el.uid+'">',
                             el.name,
                             '</option>'
                         ].join('')
