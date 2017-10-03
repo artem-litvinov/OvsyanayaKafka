@@ -1,5 +1,5 @@
 import sys
-import boto3
+#import boto3
 
 from consumer import AConsumer
 sys.path.append('./gen-py')
@@ -11,10 +11,10 @@ def callback(msg):
     kafka_message = Kafka_Message()
     deserialize(kafka_message, msg.value)
 
-    client = boto3.client("sns")
-    cluster = Cluster(['localhost']) #'35.162.115.250'
+    #client = boto3.client("sns")
+    cluster = Cluster(['172.17.0.2']) #'35.162.115.250'
 
-    session = cluster.connect('messages')
+    session = cluster.connect('users')
     m_rows = session.execute("SELECT * FROM messages WHERE mid='%s'" % (kafka_message.mid))
 
     for m_row in m_rows:
@@ -32,8 +32,7 @@ def callback(msg):
             #     TopicArn=self.__topic_arn,
             #     Message=kafka_message.message
             # )
-            # session.execute('USE messages')
-            # session.execute("UPDATE messages SET status='sent' WHERE mid='%s'" % (m_row.mid))
+            session.execute("UPDATE messages SET status='sent' WHERE mid='%s'" % (m_row.mid))
 
 def run():
     args = {'host': 'localhost', 'port': '9092'}

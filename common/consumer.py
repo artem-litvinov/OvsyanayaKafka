@@ -7,17 +7,15 @@ from kafka_common import AKafkaCommon
 from kafka import KafkaConsumer
 
 class AConsumer(AKafkaCommon):
-    def __connect(self, cb, topic):
+    def __connect(self, topic, callback = None):
         try:
             self.consumer = KafkaConsumer(bootstrap_servers=self.server())
-
-            print "connected to host: ", self.__host, ", ", "port: ", self.__port
-            cb(topic)
+            self.listen(topic, callback)
         except BaseException as e:
             print e
             time.sleep(1)
             print "connecting..."
-            self.__connect(cb, topic)
+            self.__connect(topic, callback)
 
     def listen(self, topic, callback):
         if hasattr(self, 'consumer'):
@@ -30,4 +28,4 @@ class AConsumer(AKafkaCommon):
                 except BaseException as e:
                     print e
         else:
-            self.__connect(self.listen, topic)
+            self.__connect(topic, callback)

@@ -22,7 +22,7 @@ class AProducer(AKafkaCommon):
     def send(self, topic, data):
         if hasattr(self, 'producer'):
             try:
-                serialized_data = serialize(Kafka_Message(data.mid))
+                serialized_data = serialize(Kafka_Message(data))
                 self.producer.send(topic, serialized_data)
             except BaseException as e:
                 print e
