@@ -10,7 +10,7 @@ RUN pip install cassandra-driver
 RUN apt-get update
 
 RUN apt-get install thrift-compiler
-RUN thrift -r --gen py kafka_data.thrift
+RUN thrift -r --gen py kafka_message.thrift
 
 RUN apt-get install wget -y
 RUN apt-get install unzip -y

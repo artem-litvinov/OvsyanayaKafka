@@ -1,22 +1,17 @@
 import sys
-import json
 import time
+from thrift.TSerialization import serialize
 
 from kafka_common import AKafkaCommon
 from kafka import KafkaProducer
 sys.path.append('./gen-py')
-from kafka_data.ttypes import Kafka_Data
-from thrift.TSerialization import serialize
-from cassandra.cluster import Cluster
+from kafka_message.ttypes import Kafka_Message
 
 
 class AProducer(AKafkaCommon):
     def __connect(self, cb, topic, data):
         try:
             self.producer = KafkaProducer(bootstrap_servers=self.server())
-            cluster = Cluster(['localhost']) #'35.162.115.250'
-            self.session = cluster.connect('users')
-            print "connected to host: ", self.__host, ",", "port: ", self.__port
             cb(topic, data)
         except BaseException as e:
             print e
@@ -27,10 +22,7 @@ class AProducer(AKafkaCommon):
     def send(self, topic, data):
         if hasattr(self, 'producer'):
             try:
-                self.session.execute('USE users')
-                user_id = str(int(round(time.time() * 1000)))
-                print self.session.execute("INSERT INTO users (user_id, type, contact) VALUES (%s, %s, %s)", (user_id, data.type, data.contact))
-                serialized_data = serialize(Kafka_Data(data.type, user_id, data.message ))
+                serialized_data = serialize(Kafka_Message(data.mid))
                 self.producer.send(topic, serialized_data)
             except BaseException as e:
                 print e

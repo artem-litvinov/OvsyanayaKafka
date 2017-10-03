@@ -1,9 +1,12 @@
+import os, sys
 import time
+from producer import AProducer
 from cassandra.cluster import Cluster
 from flask import Flask, jsonify, redirect, request, render_template
 
 app = Flask(__name__)
-cluster = Cluster(['localhost'])
+producer = AProducer('34.214.200.68', '9092')
+cluster = Cluster(['10.0.0.1'])
 session = cluster.connect('users')
 
 @app.route('/')
@@ -49,8 +52,15 @@ def create_user():
 @app.route('/send', methods=['POST'])
 def send_message():
     req = request.form
-    print req["uid"], req["message"]
-    return "%s %s" % (req["uid"], req["message"])
+    session.execute('USE users')
+    mid = str(int(round(time.time() * 1000)))
+    try:
+        print session.execute("INSERT INTO messages (mid, uid, date, text, status) VALUES (%s, %s, %s, %s, %s)", (mid, req["uid"],  time.time(), req["message"], "sending"))
+        producer.send('test-topic', mid)
+        return mid
+    except BaseException as e:
+        print e
+        return e
 
 
 if __name__ == '__main__':

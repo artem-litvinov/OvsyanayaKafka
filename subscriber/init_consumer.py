@@ -32,6 +32,8 @@ def callback(msg):
             #     TopicArn=self.__topic_arn,
             #     Message=kafka_message.message
             # )
+            # session.execute('USE messages')
+            # session.execute("UPDATE messages SET status='sent' WHERE mid='%s'" % (m_row.mid))
 
 def run():
     args = {'host': 'localhost', 'port': '9092'}
