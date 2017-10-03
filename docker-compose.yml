@@ -1,0 +1,16 @@
+version: '3'
+services:
+  web:
+    image: "artlitvinov/akvelon:kafka_webserver"
+    depends_on:
+      - cassandra
+    ports:
+      - "5000:5000"
+    networks:
+      - backend
+  cassandra:
+    image: "cassandra:latest"
+    networks:
+      - backend
+networks:
+  backend:
