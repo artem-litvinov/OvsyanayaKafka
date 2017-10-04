@@ -11,7 +11,8 @@ def callback(msg):
     kafka_message = Kafka_Message()
     deserialize(kafka_message, msg.value)
 
-    #client = boto3.client("sns")
+    # client = boto3.client("sns")
+    # topic_arn = client.create_topic(Name=topic)['TopicArn']
     cluster = Cluster(['172.17.0.2']) #'35.162.115.250'
 
     session = cluster.connect('users')
@@ -26,7 +27,6 @@ def callback(msg):
         for u_row in u_rows:
             print u_row
 
-            # topic_arn = client.create_topic(Name=topic)['TopicArn']
 
             # print self.__client.publish(
             #     TopicArn=self.__topic_arn,

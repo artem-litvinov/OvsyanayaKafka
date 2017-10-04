@@ -1,5 +1,6 @@
 sudo docker stop kafka_consumer kafka_cassandra kafka_webserver
 sudo docker rm kafka_consumer kafka_cassandra kafka_webserver
+sudo docker rmi artlitvinov/akvelon:kafka_cassandra artlitvinov/akvelon:kafka_consumer artlitvinov/akvelon:kafka_webserver
 sudo docker run --name kafka_cassandra -m 2g --memory-swap -1 -d artlitvinov/akvelon:kafka_cassandra
 cassandra_host=`docker inspect --format='{{ .NetworkSettings.IPAddress }}' kafka_cassandra`
 echo loading...
