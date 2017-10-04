@@ -1,4 +1,4 @@
-import os, sys
+import sys
 import pytest
 sys.path.append('common')
 from kafka_common import AKafkaCommon
