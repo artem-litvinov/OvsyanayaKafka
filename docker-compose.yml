@@ -8,8 +8,16 @@ services:
       - "5000:5000"
     networks:
       - backend
+  
+  consumer:
+    image: "artlitvinov/akvelon:kafka_consumer"
+    depends_on:
+      - cassandra
+    networks:
+      - backend
+  
   cassandra:
-    image: "cassandra:latest"
+    image: "artlitvinov/akvelon:kafka_cassandra"
     networks:
       - backend
 networks:

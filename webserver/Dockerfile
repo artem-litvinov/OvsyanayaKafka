@@ -6,7 +6,7 @@ ADD webserver/templates/. /app/templates
 ADD common/kafka_common.py /app
 ADD common/producer.py /app
 ADD common/kafka_message.thrift /app
-RUN ls
+
 RUN pip install flask
 RUN pip install thrift
 RUN pip install kafka-python
