@@ -10,9 +10,9 @@ from cassandra.cluster import Cluster
 def callback(msg):
     kafka_message = Kafka_Message()
     deserialize(kafka_message, msg.value)
-
-    # client = boto3.client("sns")
-    # topic_arn = client.create_topic(Name=topic)['TopicArn']
+    print kafka_message
+    
+    #client = boto3.client("sns")
     cluster = Cluster(['172.17.0.2']) #'35.162.115.250'
 
     session = cluster.connect('users')
@@ -21,7 +21,6 @@ def callback(msg):
     for m_row in m_rows:
         print m_row
 
-        session.execute('USE users')
         u_rows = session.execute("SELECT * FROM users WHERE uid='%s'" % (m_row.uid))
 
         for u_row in u_rows:
