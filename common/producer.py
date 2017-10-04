@@ -20,12 +20,12 @@ class AProducer(AKafkaCommon):
             self.__connect(cb, topic, data)
 
     def send(self, topic, data):
-        if hasattr(self, 'producer'):
+        if self.producer is None:
+            self.__connect(self.send, topic, data)
+        else:
             try:
                 serialized_data = serialize(Kafka_Message(data))
                 self.producer.send(topic, serialized_data)
             except BaseException as e:
                 print e
                 self.producer.send(topic, data)
-        else:
-            self.__connect(self.send, topic, data)

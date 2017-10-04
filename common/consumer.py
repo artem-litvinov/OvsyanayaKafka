@@ -18,14 +18,13 @@ class AConsumer(AKafkaCommon):
             self.__connect(topic, callback)
 
     def listen(self, topic, callback):
-        if hasattr(self, 'consumer'):
+        if self.consumer is None:
+            self.__connect(topic, callback)
+        else:
             self.consumer.subscribe(topic)
-
             for msg in self.consumer:
                 try:
                     callback(msg)
                     #thread.start_new_thread(self.__output, msg)
                 except BaseException as e:
                     print e
-        else:
-            self.__connect(topic, callback)
