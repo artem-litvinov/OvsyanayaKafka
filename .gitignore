@@ -1,3 +1,5 @@
 *.pyc
 .idea
 .vscode
+nohup.out
+.cache/v/cache/lastfailed
