@@ -4,10 +4,10 @@ services:
     image: "artlitvinov/akvelon:kafka_webserver"
     depends_on:
       - cassandra
-    ports:
-      - "5000:5000"
     networks:
       - backend
+    ports:
+      - "5000:5000"
   
   consumer:
     image: "artlitvinov/akvelon:kafka_consumer"

@@ -18,7 +18,6 @@ def create_cassandra_connection(ip):
     try:
         return Cluster([ip])
     except BaseException as e:
-        print e
         time.sleep(3)
         create_cassandra_connection(ip)
 
@@ -26,7 +25,6 @@ def create_kafka_connection(host, port):
     try:
         return AProducer(host, port)
     except BaseException as e:
-        print e
         time.sleep(3)
         create_kafka_connection(host, port)
 
