@@ -1,11 +1,15 @@
-import sys
+import os, sys
 import time
 from thrift.TSerialization import serialize
 
 from kafka_common import AKafkaCommon
 from kafka import KafkaProducer
-sys.path.append('./gen-py')
-from kafka_message.ttypes import Kafka_Message
+try:
+    sys.path.append('./gen-py')
+    from kafka_message.ttypes import Kafka_Message
+except ImportError:
+    sys.path.append(os.path.abspath(os.path.join('common','gen-py')))
+    from kafka_message.ttypes import Kafka_Message
 
 
 class AProducer(AKafkaCommon):
