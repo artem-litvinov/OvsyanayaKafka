@@ -1,9 +1,13 @@
 import sys
 #import boto3
 
-from consumer import AConsumer
-sys.path.append('./gen-py')
-from kafka_message.ttypes import Kafka_Message
+from consumer import Consumer
+try:
+    sys.path.append('./gen-py')
+    from kafka_message.ttypes import Kafka_Message
+except ImportError:
+    sys.path.append(os.path.abspath(os.path.join('common','gen-py')))
+    from kafka_message.ttypes import Kafka_Message
 from thrift.TSerialization import deserialize
 from cassandra.cluster import Cluster
 
@@ -39,8 +43,9 @@ def run():
         entry = arg.split("=")
         if len(entry) == 2:
             args[str(entry[0])] = str(entry[1])
-    a_consumer = AConsumer(args['host'], args['port'])
-    a_consumer.listen('test-topic', callback)
+    consumer = Consumer(args['host'], args['port'])
+    for msg in consumer.get_message_generator('test-topic'):
+        callback(msg)
 
 if __name__ == "__main__":
     run()

@@ -1,0 +1,57 @@
+# RUN KAFKA
+
+sudo docker run -p 2181:2181 -p 9092:9092 --env ADVERTISED_HOST=localhost --env ADVERTISED_PORT=9092 --env KAFKA_HEAP_OPTS="-Xmx256M -Xms256M" spotify/kafka
+
+sudo docker stop `sudo docker ps -aq` - stops containers
+
+sudo docker ps - lists containers
+
+
+# RUN CONSUMER
+
+ssh -i /home/artem/_DATA/Kafkatest.pem ubuntu@ec2-34-227-227-49.compute-1.amazonaws.com
+
+INSTALL DOCKER https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
+
+sudo docker run -it artlitvinov/akvelon:kafka_consumer
+
+
+# RUN CASSANDRA
+
+sudo docker run --name kafka_cassandra -m 2g --memory-swap -1 -d artlitvinov/akvelon:kafka_cassandra && \
+
+sudo docker inspect --format='{{ .NetworkSettings.IPAddress }}' kafka_cassandra && \
+
+sudo docker run -it --link kafka_cassandra --rm kafka_cassandra sh -c 'exec cqlsh CASSANDRA_HOST -f prepare.cql'
+
+# RUN WEBSERVER
+
+sudo docker run --name kafka_webserver -p 5000:5000 -i artlitvinov/akvelon:kafka_webserver
+
+
+# BUILD AND PUSH CONSUMER
+
+sudo docker build -t kafka_consumer -f subscriber/Dockerfile . && \
+
+sudo docker tag kafka_consumer artlitvinov/akvelon:kafka_consumer && \
+
+sudo docker push artlitvinov/akvelon:kafka_consumer
+
+
+# BUILD AND PUSH WEBSERVER
+
+sudo docker build -t kafka_webserver -f webserver/Dockerfile .  && \
+
+sudo docker tag kafka_webserver artlitvinov/akvelon:kafka_webserver  && \
+
+sudo docker push artlitvinov/akvelon:kafka_webserver
+
+
+# BUILD AND PUSH CASSANDRA
+
+sudo docker build -t kafka_webserver -f webserver/Dockerfile . && \
+
+sudo docker tag kafka_webserver artlitvinov/akvelon:kafka_webserver && \
+
+sudo docker push artlitvinov/akvelon:kafka_webserver
+

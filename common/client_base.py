@@ -1,7 +1,7 @@
 """
 Kafka common
 """
-class AKafkaCommon(object):
+class Client_Base(object):
     def __init__(self, host='localhost', port='9092'):
         self.__host = host
         self.__port = port

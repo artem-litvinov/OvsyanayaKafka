@@ -1,10 +1,10 @@
 import time
 import os, sys
 try:
-    from producer import AProducer
+    from producer import Producer
 except ImportError:
     sys.path.append(os.path.abspath(os.path.join('common'))) # dev
-    from producer import AProducer
+    from producer import Producer
 from cassandra.cluster import Cluster
 from flask import Flask, jsonify, redirect, request, render_template
 try:
@@ -23,7 +23,7 @@ def create_cassandra_connection(ip):
 
 def create_kafka_connection(host, port):
     try:
-        return AProducer(host, port)
+        return Producer(host, port)
     except BaseException as e:
         time.sleep(3)
         create_kafka_connection(host, port)
