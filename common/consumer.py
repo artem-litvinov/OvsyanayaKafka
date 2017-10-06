@@ -18,9 +18,7 @@ class AConsumer(AKafkaCommon):
             self.__connect(topic, callback)
 
     def listen(self, topic, callback):
-        if self.consumer is None:
-            self.__connect(topic, callback)
-        else:
+        if hasattr(self, 'consumer'):
             self.consumer.subscribe(topic)
             for msg in self.consumer:
                 try:
@@ -28,3 +26,5 @@ class AConsumer(AKafkaCommon):
                     #thread.start_new_thread(self.__output, msg)
                 except BaseException as e:
                     print e
+        else:
+            self.__connect(topic, callback)
