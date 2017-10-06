@@ -31,6 +31,7 @@ def create_kafka_connection(host, port):
 def create_app():
     app = Flask(__name__)
     producer = create_kafka_connection('34.214.200.68', '9092')
+    # cluster = create_cassandra_connection('localhost')
     cluster = create_cassandra_connection('172.17.0.2')
     session = cluster.connect('users')
 
@@ -68,7 +69,7 @@ def create_app():
 
     @app.route('/user', methods=['POST'])
     def create_user():
-        req = request.form
+        req = request.json
         session.execute('USE users')
         uid = str(int(round(time.time() * 1000)))
         print session.execute("INSERT INTO users (uid, name, type, contact) VALUES (%s, %s, %s, %s)", (uid, req["name"],  req["type"], req["contact"]))
@@ -76,7 +77,7 @@ def create_app():
 
     @app.route('/send', methods=['POST'])
     def send_message():
-        req = request.form
+        req = request.json
         session.execute('USE users')
         mid = str(int(round(time.time() * 1000)))
         try:

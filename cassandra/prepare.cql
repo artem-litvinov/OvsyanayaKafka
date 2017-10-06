@@ -21,5 +21,5 @@ CREATE TABLE users.messages (
 
 USE users;
 
-INSERT INTO users.users (uid, type, name, contact) VALUES("1", "email", "m0sk1t", "m0sk1t@bk.ru");
-INSERT INTO users.users (uid, type, name, contact) VALUES("2", "email", "artlitvinov", "work.litvinov.artem@gmail.com");
+INSERT INTO users.users (uid, type, name, contact) VALUES('1', 'email', 'm0sk1t', 'm0sk1t@bk.ru');
+INSERT INTO users.users (uid, type, name, contact) VALUES('2', 'email', 'artlitvinov', 'work.litvinov.artem@gmail.com');

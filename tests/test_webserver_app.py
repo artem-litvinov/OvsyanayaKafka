@@ -52,12 +52,12 @@ def test_user(client):
 
 def test_post_create_user(client):
     user = {'name': 'User Name', 'type': 'email','contact': 'user@name.com'}
-    response = client.post('user', data = json.dumps(user), content_type='application/x-www-form-urlencoded')
-    print response
-#    assert re.compile('[0-9]+').match(response)
+    response = client.post('user', data = json.dumps(user), content_type='application/json')
+    assert re.compile('[0-9]+').match(str(response.json))
+    assert response.status_code == 200
 
 def test_post_send_message(client):
     user = {'uid': '123456', 'message': 'test'}
-    response = client.post('send', data = json.dumps(user), content_type='application/x-www-form-urlencoded')
-    print response
-#    assert re.compile('[0-9]+').match(response)
+    response = client.post('send', data = json.dumps(user), content_type='application/json')
+    assert re.compile('[0-9]+').match(str(response.json))
+    assert response.status_code == 200

@@ -68,12 +68,19 @@
             var contact = form.querySelector('#contact');
             if (!name.value) return alert('Empty name!');
             if (!contact.value) return alert('Empty email!');
+/*
             var fd = new FormData();
             fd.append('name', name.value);
             fd.append('type', type.value);
             fd.append('contact', contact.value);
+*/
+            xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.open('POST','/user');
-            xhr.send(fd);
+            xhr.send({
+                'name': name.value,
+                'type': type.value,
+                'contact': contact.value
+            });
             xhr.onreadystatechange = function() {
                 if (xhr.readyState != 4) return;
                 status_text.style.display = 'block';
