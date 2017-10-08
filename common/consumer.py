@@ -8,26 +8,26 @@ from kafka import KafkaConsumer
 from kafka.errors import NoBrokersAvailable
 
 class Consumer(Client_Base):
-    def __connect(self):
+    def connect(self):
         self.consumer = KafkaConsumer(bootstrap_servers=self.server())
     
     def try_connect(self):
         try: 
-            self.__connect()
+            self.connect()
             return True
         except NoBrokersAvailable as e:
-            print e
+            print e.message
             return False 
 
     def subscribe(self, topic):
         if hasattr(self, 'consumer') == False:
             while self.try_connect() != True:
                 time.sleep(1)
-
+        
         try:
             self.consumer.subscribe(topic)
         except BaseException as e:
-            print e
+            print e.message
 
     def get_message_generator(self, topic = None):
             if hasattr(self, 'consumer') == False and topic is not None:
