@@ -63,17 +63,13 @@
         function create_user(e) {
             e.preventDefault();
             var form = e.target;
-            var name = form.querySelector('#name');
-            var type = form.querySelector('#type');
-            var contact = form.querySelector('#contact');
-            if (!name.value) return alert('Empty name!');
-            if (!contact.value) return alert('Empty email!');
-            xhr.setRequestHeader('Content-Type', 'application/json');
+            if (!form.querySelector('#name').value || !form.querySelector('#contact').value) return alert('Empty name or email!');
             xhr.open('POST','/user');
+            xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send({
-                'name': name.value,
-                'type': type.value,
-                'contact': contact.value
+                'name': form.querySelector('#name').value,
+                'type': form.querySelector('#type').value,
+                'contact': form.querySelector('#contact').value
             });
             xhr.onreadystatechange = function() {
                 if (xhr.readyState != 4) return;
