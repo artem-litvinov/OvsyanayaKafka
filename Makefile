@@ -1,4 +1,4 @@
-.PHONY : install thrift test consumer webserver clear_consumer clear_webserver cassandra
+.PHONY : install thrift tests consumer webserver clear_consumer clear_webserver cassandra clear_all
 
 install:
 	sudo apt update
@@ -6,11 +6,11 @@ install:
 	sudo apt-get install python cassandra thrift-compiler
 	pipenv install
 
-test:
+tests:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
 	thrift -r -out webserver --gen py thrift/kafka_message.thrift
 	py.test -s -v tests
-	rm -r tests/__pycache__
+	rm -r tests/__pycache__ consumer/kafka_message webserver/kafka_message
 
 consumer:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
