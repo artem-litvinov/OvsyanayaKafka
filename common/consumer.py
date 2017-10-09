@@ -3,47 +3,26 @@ import json
 import time
 import thread
 
-from client_base import Client_Base
 from kafka import KafkaConsumer
-from kafka.errors import NoBrokersAvailable
 
-class Consumer(Client_Base):
-    def connect(self):
-        self.consumer = KafkaConsumer(bootstrap_servers=self.server())
-    
-    def try_connect(self):
-        try: 
-            self.connect()
-            return True
-        except NoBrokersAvailable as e:
-            print e.message
-            return False 
+class Consumer():
+    def __init__(self, host='localhost', port='9092'):
+        self.__address = "%s:%s" % (host, port)
+        self.consumer = KafkaConsumer(bootstrap_servers=self.__address)
 
     def subscribe(self, topic):
-        if hasattr(self, 'consumer') == False:
-            while self.try_connect() != True:
-                time.sleep(1)
-        
-        try:
-            self.consumer.subscribe(topic)
-        except BaseException as e:
-            print e.message
+        self.consumer.subscribe(topic)
 
-    def get_message_generator(self, topic = None):
-            if hasattr(self, 'consumer') == False and topic is not None:
-                self.subscribe(topic)
+    def messages(self, topic = None):
+        if topic is None:
+            raise RuntimeError('You have no available consumer yet!')
 
-            if hasattr(self, 'consumer') == False and topic is None:
-                raise RuntimeError('You have no available consumer yet!')
+        self.subscribe(topic)
+        return self.consumer
 
-            return self.consumer
-
-
-def callback(msg):
-    print msg
 
 if __name__ == "__main__":
     consumer = Consumer('34.214.200.68', '9092')
-    gen = consumer.get_message_generator('test-topic')
-    for m in gen:
-        print m
+    messages = consumer.messages('test-topic')
+    for message in messages:
+        print message
