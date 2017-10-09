@@ -37,6 +37,8 @@ class Consumer(Client_Base):
                 raise RuntimeError('You have no available consumer yet!')
 
             return self.consumer
+
+
 def callback(msg):
     print msg
 

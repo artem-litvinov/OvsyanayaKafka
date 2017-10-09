@@ -1,10 +1,7 @@
 import time
 import os, sys
-try:
-    from producer import Producer
-except ImportError:
-    sys.path.append(os.path.abspath(os.path.join('common'))) # dev
-    from producer import Producer
+from producer import Producer
+
 from cassandra.cluster import Cluster
 from flask import Flask, jsonify, redirect, request, render_template
 try:
