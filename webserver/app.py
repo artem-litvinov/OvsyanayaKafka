@@ -8,7 +8,7 @@ from flask import Flask, jsonify, redirect, request, render_template
 def create_app():
     app = Flask(__name__)
     producer = Producer('34.214.200.68', '9092')
-    cluster = Cluster(['172.17.0.2'])
+    cluster = Cluster(['127.0.0.1'])
     session = cluster.connect('users')
 
     @app.route('/')

@@ -1,7 +1,6 @@
 import sys
 import pytest
-sys.path.append('common')
-from consumer import Consumer
+from consumer.consumer import Consumer
 from kafka.errors import NoBrokersAvailable
 
 @pytest.fixture

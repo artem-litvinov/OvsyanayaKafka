@@ -1,7 +1,7 @@
 import time
 from kafka import KafkaProducer
 from thrift.TSerialization import serialize
-from kafka_message.ttypes import Kafka_Message
+from kafka_message.ttypes import KafkaMessage
 
 
 class Producer():
@@ -10,8 +10,9 @@ class Producer():
         self.producer = KafkaProducer(bootstrap_servers=self.__address)
 
     def send(self, topic, data):
-        serialized_data = serialize(Kafka_Message(data))
+        serialized_data = serialize(KafkaMessage(data))
         self.producer.send(topic, serialized_data)
+
 
 if __name__ == "__main__":
     producer = Producer('34.214.200.68', '9092')
