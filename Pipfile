@@ -1,0 +1,18 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[dev-packages]
+
+pytest = "*"
+"pytest-flask" = "*"
+"pytest-timeout" = "*"
+
+[packages]
+
+thrift = "*"
+"kafka-python" = "*"
+"boto3" = "*"
+flask = "*"
+"cassandra-driver" = "*"

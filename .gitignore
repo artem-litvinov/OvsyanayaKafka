@@ -3,3 +3,4 @@
 .cache
 .vscode
 nohup.out
+common/kafka_message
