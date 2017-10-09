@@ -3,8 +3,7 @@ import sys
 import json
 import pytest
 from flask import url_for
-sys.path.append('webserver')
-from app import create_app
+from webserver.app import create_app
 
 @pytest.fixture
 def app():

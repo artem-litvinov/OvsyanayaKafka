@@ -1,35 +1,15 @@
 import time
-import os, sys
 from producer import Producer
 
 from cassandra.cluster import Cluster
 from flask import Flask, jsonify, redirect, request, render_template
-try:
-    sys.path.append('./gen-py')
-    from kafka_message.ttypes import Kafka_Message
-except ImportError:
-    sys.path.append(os.path.abspath(os.path.join('common','gen-py')))
-    from kafka_message.ttypes import Kafka_Message
+from .kafka_message.ttypes import Kafka_Message
 
-def create_cassandra_connection(ip):
-    try:
-        return Cluster([ip])
-    except BaseException as e:
-        time.sleep(3)
-        create_cassandra_connection(ip)
-
-def create_kafka_connection(host, port):
-    try:
-        return Producer(host, port)
-    except BaseException as e:
-        time.sleep(3)
-        create_kafka_connection(host, port)
 
 def create_app():
     app = Flask(__name__)
-    producer = create_kafka_connection('34.214.200.68', '9092')
-    # cluster = create_cassandra_connection('localhost')
-    cluster = create_cassandra_connection('172.17.0.2')
+    producer = Producer('34.214.200.68', '9092')
+    cluster = Cluster(['172.17.0.2'])
     session = cluster.connect('users')
 
     @app.route('/')

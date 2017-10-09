@@ -1,7 +1,7 @@
 [[source]]
-url = "https://pypi.python.org/simple"
-verify_ssl = true
 name = "pypi"
+verify_ssl = true
+url = "https://pypi.python.org/simple"
 
 [dev-packages]
 
@@ -11,8 +11,8 @@ pytest = "*"
 
 [packages]
 
-thrift = "*"
-"kafka-python" = "*"
-"boto3" = "*"
 flask = "*"
+thrift = "*"
+"boto3" = "*"
+"kafka-python" = "*"
 "cassandra-driver" = "*"

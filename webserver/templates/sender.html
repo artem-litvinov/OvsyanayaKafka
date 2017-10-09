@@ -74,12 +74,6 @@
             var users = form.querySelector('#users');
             var message = form.querySelector('#message');
             if (!message.value) return alert('Empty message!');
-/*
-            var fd = new FormData();
-            fd.append('uid', users.value);
-            fd.append('message', message.value);
-            xhr.open('POST','/send');
-*/
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify({
                 'uid': users.value,

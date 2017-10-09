@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "dbda43b879658626fe637b353d869c26fa8bd1809282553f10b31f98b2eeb8f8"
+            "sha256": "ad03260875b727246a9f6240dcc50535a367102f6dd2d61d54c8c6e0b7021cfe"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -9,12 +9,12 @@
             "os_name": "posix",
             "platform_machine": "x86_64",
             "platform_python_implementation": "CPython",
-            "platform_release": "16.7.0",
-            "platform_system": "Darwin",
-            "platform_version": "Darwin Kernel Version 16.7.0: Thu Jun 15 17:36:27 PDT 2017; root:xnu-3789.70.16~2/RELEASE_X86_64",
-            "python_full_version": "2.7.10",
+            "platform_release": "4.10.0-35-generic",
+            "platform_system": "Linux",
+            "platform_version": "#39~16.04.1-Ubuntu SMP Wed Sep 13 09:02:42 UTC 2017",
+            "python_full_version": "2.7.12",
             "python_version": "2.7",
-            "sys_platform": "darwin"
+            "sys_platform": "linux2"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -74,6 +74,7 @@
                 "sha256:c4884a65654a7c45435063e14ae85280eb1f111d94e542396717ba9828c4337f",
                 "sha256:51ecb45f0add83c806c68e4b06106f90db260585b25ef2abfcda0bd95c0132fd"
             ],
+            "markers": "python_version == '2.6' or python_version == '2.7'",
             "version": "==3.1.1"
         },
         "itsdangerous": {
@@ -145,6 +146,12 @@
         }
     },
     "develop": {
+        "cassandra-driver": {
+            "hashes": [
+                "sha256:643bed0fac08ee91630f0f35556bb62c3b4b007c20d4e6e8d349f769ea648150"
+            ],
+            "version": "==3.11.0"
+        },
         "click": {
             "hashes": [
                 "sha256:29f99fc6125fbc931b758dc053b3114e55c77a6e4c6c3a2674a2dc986016381d",
@@ -159,6 +166,13 @@
             ],
             "version": "==0.12.2"
         },
+        "futures": {
+            "hashes": [
+                "sha256:c4884a65654a7c45435063e14ae85280eb1f111d94e542396717ba9828c4337f",
+                "sha256:51ecb45f0add83c806c68e4b06106f90db260585b25ef2abfcda0bd95c0132fd"
+            ],
+            "version": "==3.1.1"
+        },
         "itsdangerous": {
             "hashes": [
                 "sha256:cbb3fcf8d3e33df861709ecaf89d9e6629cff0a217bc2848f1b41cd30d360519"
@@ -171,6 +185,13 @@
                 "sha256:ddaa01a212cd6d641401cb01b605f4a4d9f37bfc93043d7f760ec70fb99ff9ff"
             ],
             "version": "==2.9.6"
+        },
+        "kafka-python": {
+            "hashes": [
+                "sha256:855105b5729e2d491eb3db9d79a634bd307d1efcfe0fd6398c0279f670a84f83",
+                "sha256:b238d054d744299483c70c4e3e029ee09ff8327a87730ee0cbcfe23e5973a9a6"
+            ],
+            "version": "==1.3.5"
         },
         "markupsafe": {
             "hashes": [
@@ -205,6 +226,19 @@
                 "sha256:c29e3168f10897728059bd6b8ca20b28733d7fe6b8f6c09bb9d89f6146f27cb8"
             ],
             "version": "==1.2.0"
+        },
+        "six": {
+            "hashes": [
+                "sha256:832dc0e10feb1aa2c68dcc57dbb658f1c7e65b9b61af69048abc87a2db00a0eb",
+                "sha256:70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9"
+            ],
+            "version": "==1.11.0"
+        },
+        "thrift": {
+            "hashes": [
+                "sha256:b7f6c09155321169af03f9fb20dc15a4a0c7481e7c334a5ba8f7f0d864633209"
+            ],
+            "version": "==0.10.0"
         },
         "werkzeug": {
             "hashes": [
