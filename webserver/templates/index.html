@@ -66,11 +66,11 @@
             if (!form.querySelector('#name').value || !form.querySelector('#contact').value) return alert('Empty name or email!');
             xhr.open('POST','/user');
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send({
+            xhr.send(JSON.stringify({
                 'name': form.querySelector('#name').value,
                 'type': form.querySelector('#type').value,
                 'contact': form.querySelector('#contact').value
-            });
+            }));
             xhr.onreadystatechange = function() {
                 if (xhr.readyState != 4) return;
                 status_text.style.display = 'block';
