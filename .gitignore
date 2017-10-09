@@ -3,3 +3,5 @@
 .vscode
 nohup.out
 .cache/v/cache/lastfailed
+
+common/kafka_message

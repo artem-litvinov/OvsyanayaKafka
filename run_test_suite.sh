@@ -1,1 +1,0 @@
-sudo -H pip install pytest pytest-flask && py.test -s -v tests
