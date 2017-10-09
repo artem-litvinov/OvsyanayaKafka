@@ -3,7 +3,6 @@ from producer import Producer
 
 from cassandra.cluster import Cluster
 from flask import Flask, jsonify, redirect, request, render_template
-from .kafka_message.ttypes import Kafka_Message
 
 
 def create_app():
@@ -57,13 +56,9 @@ def create_app():
         req = request.json
         session.execute('USE users')
         mid = str(int(round(time.time() * 1000)))
-        try:
-            print session.execute("INSERT INTO messages (mid, uid, date, text, status) VALUES (%s, %s, %s, %s, %s)", (mid, req["uid"],  str(time.time()), req["message"], "sending"))
-            producer.send('test-topic', mid)
-            return mid
-        except BaseException as e:
-            print e
-            return e
+        print session.execute("INSERT INTO messages (mid, uid, date, text, status) VALUES (%s, %s, %s, %s, %s)", (mid, req["uid"],  str(time.time()), req["message"], "sending"))
+        producer.send('test-topic', mid)
+        return mid
 
     return app
 

@@ -55,3 +55,6 @@ sudo docker tag kafka_webserver artlitvinov/akvelon:kafka_webserver && \
 
 sudo docker push artlitvinov/akvelon:kafka_webserver
 
+# RM ALL CONTAINERS
+
+sudo docker rm -f $(sudo docker ps -aq)

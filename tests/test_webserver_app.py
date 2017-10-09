@@ -1,5 +1,4 @@
 import re
-import sys
 import json
 import pytest
 from flask import url_for
@@ -56,7 +55,7 @@ def test_post_create_user(client):
     assert response.status_code == 200
 
 def test_post_send_message(client):
-    user = {'uid': '123456', 'message': 'test'}
-    response = client.post('send', data = json.dumps(user), content_type='application/json')
+    message = {'uid': '123456', 'message': 'test'}
+    response = client.post('send', data = json.dumps(message), content_type='application/json')
     assert re.compile('[0-9]+').match(str(response.json))
     assert response.status_code == 200

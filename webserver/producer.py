@@ -1,7 +1,7 @@
 import time
 from kafka import KafkaProducer
 from thrift.TSerialization import serialize
-from .kafka_message.ttypes import Kafka_Message
+from kafka_message.ttypes import Kafka_Message
 
 
 class Producer():
