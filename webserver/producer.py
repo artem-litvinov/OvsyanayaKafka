@@ -1,3 +1,4 @@
+import os
 import time
 from kafka import KafkaProducer
 from thrift.TSerialization import serialize
@@ -15,6 +16,10 @@ class Producer():
 
 
 if __name__ == "__main__":
-    producer = Producer('34.214.200.68', '9092')
+    try:
+        KAFKA_HOST = os.environ['KAFKA_HOST']
+    except KeyError as err:
+        print(err, "Please set KAFKA_HOST environment variable")
+    producer = Producer(KAFKA_HOST, '9092')
     producer.send('test-topic', '1507300909746')
     time.sleep(1)

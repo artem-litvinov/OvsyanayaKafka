@@ -1,3 +1,4 @@
+import os
 import re
 import json
 import pytest
@@ -5,6 +6,10 @@ from flask import url_for
 from pytest_flask.fixtures import client
 from webserver.app import create_app
 
+
+os.putenv('WEBSERVER_PORT', '5000')
+os.putenv('KAFKA_HOST', '34.214.200.68')
+os.putenv('CASSANDRA_HOST', 'localhost')
 
 @pytest.fixture
 def app():

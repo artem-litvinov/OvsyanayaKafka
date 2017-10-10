@@ -7,15 +7,17 @@ from thrift.TSerialization import deserialize
 from cassandra.cluster import Cluster
 
 
-KAFKA_HOST = os.environ['KAFKA_HOST']
-CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
 def callback(msg):
+    try:
+        CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
+    except KeyError as err:
+        print(err, "Please set CASSANDRA_HOST environment variable")
     kafka_message = KafkaMessage()
     deserialize(kafka_message, msg.value)
     print kafka_message
     
     #client = boto3.client("sns")
-    cluster = Cluster([CASSANDRA_HOST]) #'35.162.115.250'
+    cluster = Cluster([CASSANDRA_HOST])
 
     session = cluster.connect('users')
     m_rows = session.execute("SELECT * FROM messages WHERE mid='%s'" % (kafka_message.mid))
@@ -36,6 +38,10 @@ def callback(msg):
             session.execute("UPDATE messages SET status='sent' WHERE mid='%s'" % (m_row.mid))
 
 def run():
+    try:
+        KAFKA_HOST = os.environ['KAFKA_HOST']
+    except KeyError as err:
+        print(err, "Please set KAFKA_HOST environment variable")
     consumer = Consumer(KAFKA_HOST, '9092')
     for msg in consumer.messages('test-topic'):
         callback(msg)

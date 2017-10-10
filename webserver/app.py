@@ -6,11 +6,16 @@ from cassandra.cluster import Cluster
 from flask import Flask, jsonify, redirect, request, render_template
 
 
-KAFKA_HOST = os.environ['KAFKA_HOST']
-CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
-WEBSERVER_PORT = os.environ['WEBSERVER_PORT']
-
 def create_app():
+    try:
+        KAFKA_HOST = os.environ['KAFKA_HOST']
+    except KeyError as err:
+        print(err, "Please set KAFKA_HOST environment variable")
+    try:
+       CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
+    except KeyError as err:
+        print(err, "Please set CASSANDRA_HOST environment variable")
+
     app = Flask(__name__)
     producer = Producer(KAFKA_HOST, '9092')
     cluster = Cluster([CASSANDRA_HOST])
@@ -68,5 +73,9 @@ def create_app():
     return app
 
 if __name__ == '__main__':
+    try:
+        WEBSERVER_PORT = os.environ['WEBSERVER_PORT']
+    except KeyError as err:
+        print(err, "Please set WEBSERVER_PORT environment variable")
     app = create_app()
-    app.run(debug=True, port=WEBSERVER_PORT host='0.0.0.0')
+    app.run(debug=True, port=WEBSERVER_PORT, host='0.0.0.0')
