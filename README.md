@@ -1,5 +1,13 @@
 # OvsyanayaKafka
 
+## Prerequisites
+
+- Docker
+- Python 2.7
+- Pip
+- Pipenv (`pip install pipenv`)
+- Thrift compiler (`apt-get install thrift-compiler` or `brew install thrift`)
+
 ## Installation
 
     make install
