@@ -1,4 +1,4 @@
-.PHONY : install thrift tests consumer webserver clear_consumer clear_webserver cassandra clear_all
+.PHONY : install tests consumer webserver cassandra clear_consumer clear_webserver clear_all
 
 install:
 	sudo apt update
@@ -10,7 +10,9 @@ tests:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
 	thrift -r -out webserver --gen py thrift/kafka_message.thrift
 	py.test -s -v tests
-	rm -r tests/__pycache__ consumer/kafka_message webserver/kafka_message
+	make clear_consumer
+	make clear_webserver
+	make clear_tests
 
 consumer:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
@@ -20,14 +22,20 @@ webserver:
 	thrift -r -out webserver --gen py thrift/kafka_message.thrift
 	cd webserver && python app.py
 
-clear_consumer:
-	cd consumer && rm -r ./kafka_message ./__init__.py **/*.pyc
-
-clear_webserver:
-	cd webserver && rm -r ./kafka_message ./__init__.py **/*.pyc
-
 cassandra:
 	sudo service cassandra start
 	cd cassandra && sudo cqlsh -f prepare.cql
 
-clear_all: clear_consumer clear_webserver
+build_and_push_consumer:
+	sudo docker build -t kafka_consumer -f consumer/Dockerfile . && \
+	sudo docker tag kafka_consumer artlitvinov/akvelon:kafka_consumer && \
+	sudo docker push artlitvinov/akvelon:kafka_consumer
+
+clear_consumer:
+	cd consumer && rm -r ./kafka_message ./*.pyc
+
+clear_webserver:
+	cd webserver && rm -r ./kafka_message ./*.pyc
+
+clear_tests:
+	cd tests && rm -r ./__pycache__ ./*.pyc

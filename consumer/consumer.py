@@ -14,10 +14,9 @@ class Consumer():
         self.consumer.subscribe(topic)
 
     def messages(self, topic = None):
-        if topic is None:
-            raise RuntimeError('You have no available consumer yet!')
+        if topic is not None:
+            self.subscribe(topic)
 
-        self.subscribe(topic)
         return self.consumer
 
 

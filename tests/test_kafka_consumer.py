@@ -5,7 +5,7 @@ from kafka.errors import NoBrokersAvailable
 
 @pytest.fixture
 def consumer():
-    consumer = Consumer('12.345.678.90', '9092')
+    consumer = Consumer('34.214.200.68', '9092')
     return consumer
 
 @pytest.fixture
@@ -29,25 +29,18 @@ def fake_message_generator():
                 raise StopIteration()
     
     return int_enumeration(4)
-'''
+
 def test_no_brokers_available_error():
     with pytest.raises(NoBrokersAvailable):
-        c = consumer()
-        c.connect()
+        c = Consumer('12.345.678.90', '9092')
 
-def test_connection_error():
+def test_subscribe():
     c = consumer()
-    assert c.try_connect() == False
+    c.subscribe('test-topic')
 
 def test_fake_message_generator():
     c = consumer()
     c.consumer = fake_message_generator()
-    generator = c.messages()
-    assert sum(generator) == 10
-'''
-
-@pytest.mark.xfail
-@pytest.mark.timeout(3)
-def test_timeout_error():
-    c = consumer()
-    c.subscribe('some_topic')
+    messages = c.messages()
+    assert sum(messages) == 10
+    
