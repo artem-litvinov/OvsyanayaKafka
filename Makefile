@@ -1,9 +1,6 @@
 .PHONY : install tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver
 
 install:
-	sudo apt update
-	sudo -H pip install pipenv
-	sudo apt-get install python cassandra thrift-compiler
 	pipenv install
 
 thrift_for_consumer:
