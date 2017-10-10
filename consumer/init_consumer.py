@@ -1,4 +1,4 @@
-import sys, os
+import os
 #import boto3
 
 from consumer import Consumer
@@ -6,13 +6,16 @@ from kafka_message.ttypes import KafkaMessage
 from thrift.TSerialization import deserialize
 from cassandra.cluster import Cluster
 
+
+KAFKA_HOST = os.environ['KAFKA_HOST']
+CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
 def callback(msg):
     kafka_message = KafkaMessage()
     deserialize(kafka_message, msg.value)
     print kafka_message
     
     #client = boto3.client("sns")
-    cluster = Cluster(['172.17.0.2']) #'35.162.115.250'
+    cluster = Cluster([CASSANDRA_HOST]) #'35.162.115.250'
 
     session = cluster.connect('users')
     m_rows = session.execute("SELECT * FROM messages WHERE mid='%s'" % (kafka_message.mid))
@@ -33,12 +36,7 @@ def callback(msg):
             session.execute("UPDATE messages SET status='sent' WHERE mid='%s'" % (m_row.mid))
 
 def run():
-    args = {'host': 'localhost', 'port': '9092'}
-    for arg in sys.argv:
-        entry = arg.split("=")
-        if len(entry) == 2:
-            args[str(entry[0])] = str(entry[1])
-    consumer = Consumer(args['host'], args['port'])
+    consumer = Consumer(KAFKA_HOST, '9092')
     for msg in consumer.messages('test-topic'):
         callback(msg)
 
