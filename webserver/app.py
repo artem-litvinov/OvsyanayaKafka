@@ -1,3 +1,4 @@
+import os
 import time
 from producer import Producer
 
@@ -5,10 +6,14 @@ from cassandra.cluster import Cluster
 from flask import Flask, jsonify, redirect, request, render_template
 
 
+KAFKA_HOST = os.environ['KAFKA_HOST']
+CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
+WEBSERVER_PORT = os.environ['WEBSERVER_PORT']
+
 def create_app():
     app = Flask(__name__)
-    producer = Producer('34.214.200.68', '9092')
-    cluster = Cluster(['127.0.0.1'])
+    producer = Producer(KAFKA_HOST, '9092')
+    cluster = Cluster([CASSANDRA_HOST])
     session = cluster.connect('users')
 
     @app.route('/')
@@ -64,4 +69,4 @@ def create_app():
 
 if __name__ == '__main__':
     app = create_app()
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, port=WEBSERVER_PORT host='0.0.0.0')

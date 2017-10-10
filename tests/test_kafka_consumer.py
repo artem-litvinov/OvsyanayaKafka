@@ -1,11 +1,13 @@
-import sys
+import os
 import pytest
 from consumer.consumer import Consumer
 from kafka.errors import NoBrokersAvailable
 
+KAFKA_HOST = os.environ['KAFKA_HOST']
+
 @pytest.fixture
 def consumer():
-    consumer = Consumer('34.214.200.68', '9092')
+    consumer = Consumer(KAFKA_HOST, '9092')
     return consumer
 
 @pytest.fixture
