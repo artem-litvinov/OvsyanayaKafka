@@ -25,8 +25,7 @@ webserver: thrift_for_webserver
 	cd webserver && python app.py
 
 cassandra:
-	sudo service cassandra start
-	cd cassandra && sudo cqlsh -f prepare.cql
+	docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
 
 build_and_push_consumer:
 	sudo docker build -t kafka_consumer -f consumer/Dockerfile . && \
