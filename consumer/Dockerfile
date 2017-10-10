@@ -1,6 +1,5 @@
 FROM python:2.7-slim
 
-# RUN pip install boto3
 RUN pip install thrift kafka-python cassandra-driver
 
 ENV KAFKA_HOST 0.0.0.0
