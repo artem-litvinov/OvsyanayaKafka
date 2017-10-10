@@ -22,6 +22,7 @@ if __name__ == "__main__":
         KAFKA_HOST = os.environ['KAFKA_HOST']
     except KeyError as err:
         print("Please set KAFKA_HOST environment variable")
+        raise
     consumer = Consumer(KAFKA_HOST, '9092')
     for message in consumer.messages('test-topic'):
         print message

@@ -20,6 +20,7 @@ if __name__ == "__main__":
         KAFKA_HOST = os.environ['KAFKA_HOST']
     except KeyError as err:
         print(err, "Please set KAFKA_HOST environment variable")
+        raise
     producer = Producer(KAFKA_HOST, '9092')
     producer.send('test-topic', '1507300909746')
     time.sleep(1)
