@@ -2,12 +2,13 @@ import re
 import json
 import pytest
 from flask import url_for
+from pytest_flask.fixtures import client
 from webserver.app import create_app
+
 
 @pytest.fixture
 def app():
-    app = create_app()
-    return app
+    return create_app()
 
 @pytest.fixture
 def accept_mimetype(mimetype):
@@ -28,10 +29,6 @@ def accept_json(request):
 @pytest.fixture(params=['*', '*/*'])
 def accept_any(request):
     return accept_mimetype(request.param)
-
-def test_root(client):
-    assert True
-#    assert client.get(url_for('*')).status_code == 200
 
 def test_index(client):
     assert client.get(url_for('index')).status_code == 200

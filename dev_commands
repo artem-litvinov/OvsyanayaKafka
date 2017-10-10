@@ -18,10 +18,7 @@ sudo docker run -it artlitvinov/akvelon:kafka_consumer
 
 # RUN CASSANDRA
 
-sudo docker run --name kafka_cassandra -m 2g --memory-swap -1 -d artlitvinov/akvelon:kafka_cassandra && \
-
-sudo docker inspect --format='{{ .NetworkSettings.IPAddress }}' kafka_cassandra && \
-
+sudo docker run --name kafka_cassandra -m 2g --memory-swap -1 -p 9042:9042 -d artlitvinov/akvelon:kafka_cassandra && \
 sudo docker run -it --link kafka_cassandra --rm kafka_cassandra sh -c 'exec cqlsh CASSANDRA_HOST -f prepare.cql'
 
 # RUN WEBSERVER
