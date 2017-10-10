@@ -78,4 +78,4 @@ if __name__ == '__main__':
     except KeyError as err:
         print(err, "Please set WEBSERVER_PORT environment variable")
     app = create_app()
-    app.run(debug=True, port=WEBSERVER_PORT, host='0.0.0.0')
+    app.run(debug=True, port=int(WEBSERVER_PORT), host='0.0.0.0')
