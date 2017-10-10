@@ -10,13 +10,11 @@ thrift_for_webserver:
 	thrift -r -out webserver --gen py thrift/kafka_message.thrift
 
 tests: thrift_for_consumer thrift_for_webserver
-	py.test -s -v
-	make clear_consumer
-	make clear_webserver
-	make clear_tests
+	pipenv install -d
+	pipenv run py.test -s -v
 
 consumer: thrift_for_consumer
-	cd consumer && python init_consumer.py port=9092 host=34.214.200.68
+	cd consumer && pipenv run python init_consumer.py port=9092 host=34.214.200.68
 
 webserver: thrift_for_webserver
 	cd webserver && python app.py
@@ -28,12 +26,3 @@ build_and_push_consumer:
 	sudo docker build -t kafka_consumer -f consumer/Dockerfile . && \
 	sudo docker tag kafka_consumer artlitvinov/akvelon:kafka_consumer && \
 	sudo docker push artlitvinov/akvelon:kafka_consumer
-
-clear_consumer:
-	cd consumer && rm -r ./kafka_message ./*.pyc
-
-clear_webserver:
-	cd webserver && rm -r ./kafka_message ./*.pyc
-
-clear_tests:
-	cd tests && rm -r ./__pycache__ ./*.pyc

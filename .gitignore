@@ -4,3 +4,5 @@
 .vscode
 nohup.out
 common/kafka_message
+consumer/kafka_message
+webserver/kafka_message
