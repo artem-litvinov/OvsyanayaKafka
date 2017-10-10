@@ -1,4 +1,4 @@
-.PHONY : install tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver
+.PHONY : install tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver consumer_image webserver_image
 
 install:
 	pipenv install
@@ -20,9 +20,19 @@ webserver: thrift_for_webserver
 	cd webserver && python app.py
 
 cassandra:
-	docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
+	sudo service cassandra start
+	cd cassandra && sudo cqlsh -f prepare.cql
 
 build_and_push_consumer:
 	sudo docker build -t kafka_consumer -f consumer/Dockerfile . && \
 	sudo docker tag kafka_consumer artlitvinov/akvelon:kafka_consumer && \
 	sudo docker push artlitvinov/akvelon:kafka_consumer
+	
+consumer_image: thrift_for_consumer
+	sudo docker build -t kafka_consumer -f consumer/Dockerfile ./consumer
+
+webserver_image: thrift_for_webserver
+	sudo docker build -t kafka_webserver -f webserver/Dockerfile ./webserver
+
+cassandra_image:
+	sudo docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
