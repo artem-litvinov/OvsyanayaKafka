@@ -1,50 +1,50 @@
-import os
-import mock
+import boto3
 import pytest
+
 from consumer.consumer import Consumer
 from kafka.errors import NoBrokersAvailable
+from thrift.TSerialization import serialize
+from tests.test_webserver_app import cluster
+from consumer.kafka_message.ttypes import KafkaMessage
+from consumer.init_consumer import kafka_message_handler
 
+class KafkaMessageEumeration():
+    def __init__(self, n):
+        self.n = n
+        self.num = 1
+    
+    def __iter__(self):
+        return self
+
+    def next(self):
+        if self.num <= self.n:
+            cur, self.num = str(self.num), self.num+1
+            msg = KafkaMessage(cur)
+            s_msg = serialize(msg)
+            return DictionaryMock(value=s_msg)
+        else:
+            raise StopIteration()
+
+class DictionaryMock(object):
+    def __init__(self, **kwargs):
+        self.__dict__.update(kwargs)
+
+class FakeConsumer():
+    def messages(self, *args, **kvargs):
+        return KafkaMessageEumeration(3)
 
 @pytest.fixture
-@mock.patch.dict(os.environ, {'KAFKA_HOST':'localhost'})
-def consumer():
-    KAFKA_HOST = os.environ['KAFKA_HOST']
-    consumer = Consumer(KAFKA_HOST, '9092')
-    return consumer
-
-@pytest.fixture
-def fake_message_generator():
-    class int_enumeration():
-        def __init__(self, n):
-            self.n = n
-            self.num, self.nums = 1, []
-        
-        def __iter__(self):
-            return self
-        
-        def __next__(self):
-            return self.next()
-    
-        def next(self):
-            if self.num <= self.n:
-                cur, self.num = self.num, self.num+1
-                return cur
-            else:
-                raise StopIteration()
-    
-    return int_enumeration(4)
+def fake_consumer():
+    return FakeConsumer()
 
 def test_no_brokers_available_error():
     with pytest.raises(NoBrokersAvailable):
         c = Consumer('12.345.678.90', '9092')
 
-def test_subscribe():
-    c = consumer()
-    c.subscribe('test-topic')
+def test_kafka_message_handler():
+    session = cluster().connect('users')
+    consumer = FakeConsumer()
+    sns_client = boto3.client("sns", region_name='us-west-2')
 
-def test_fake_message_generator():
-    c = consumer()
-    c.consumer = fake_message_generator()
-    messages = c.messages()
-    assert sum(messages) == 10
-    
+    for kafka_msg in consumer.messages('test-topic'):
+        kafka_message_handler(session, sns_client, kafka_msg)
