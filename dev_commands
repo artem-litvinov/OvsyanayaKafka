@@ -55,3 +55,15 @@ sudo docker push artlitvinov/akvelon:kafka_webserver
 # RM ALL CONTAINERS
 
 sudo docker rm -f $(sudo docker ps -aq)
+
+
+# PULL REQUEST EXAMPLE
+
+git checkout -b branch_name # creates new branch
+...commit...
+git push origin branch_name # creates pull request
+...merge...
+git checkout master
+git pull
+git branch -d branch_name # deletes local branch
+git push origin --delete branch_name # deletes remote branch
