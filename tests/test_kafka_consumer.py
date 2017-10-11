@@ -1,12 +1,14 @@
 import os
+import mock
 import pytest
 from consumer.consumer import Consumer
 from kafka.errors import NoBrokersAvailable
 
-KAFKA_HOST = os.environ['KAFKA_HOST']
 
 @pytest.fixture
+@mock.patch.dict(os.environ, {'KAFKA_HOST':'localhost'})
 def consumer():
+    KAFKA_HOST = os.environ['KAFKA_HOST']
     consumer = Consumer(KAFKA_HOST, '9092')
     return consumer
 

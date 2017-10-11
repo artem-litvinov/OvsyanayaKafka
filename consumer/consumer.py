@@ -1,8 +1,6 @@
 import os
 from kafka import KafkaConsumer
 
-KAFKA_HOST = os.environ['KAFKA_HOST']
-
 
 class Consumer():
     def __init__(self, host='localhost', port='9092'):
@@ -20,6 +18,11 @@ class Consumer():
 
 
 if __name__ == "__main__":
+    try:
+        KAFKA_HOST = os.environ['KAFKA_HOST']
+    except KeyError as err:
+        print("Please set KAFKA_HOST environment variable")
+        raise
     consumer = Consumer(KAFKA_HOST, '9092')
     for message in consumer.messages('test-topic'):
         print message

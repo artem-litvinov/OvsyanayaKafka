@@ -1,34 +1,51 @@
+import os
 import re
+import mock
 import json
 import pytest
 from flask import url_for
 from pytest_flask.fixtures import client
 from webserver.app import create_app
 
+class Row():
+    def __init__(self, params={
+                    'uid': '1',
+                    'name': 'test.name',
+                    'type': 'test.type',
+                    'contact': 'test.contact',
+                }):
+        self.uid = params["uid"]
+        self.name = params["name"]
+        self.type = params["type"]
+        self.contact = params["contact"]
+
+class Session():
+    def execute(self, *args, **kvargs):
+        print(args, kvargs)
+        return [Row(), Row(), Row()]
+
+class CassandraCluster():
+    def connect(self, *args, **kvargs):
+        return Session()
+
+class Producer():
+    def send(self, *args, **kvargs):
+        print(args, kvargs)
+
+@pytest.fixture(scope="module")
+def cluster():
+    return CassandraCluster()
 
 @pytest.fixture
-def app():
-    return create_app()
+def producer():
+    return Producer()
 
 @pytest.fixture
-def accept_mimetype(mimetype):
-    return [('Accept', mimetype)]
-
-@pytest.fixture
-def accept_multipart_form_data(request):
-    return accept_mimetype('multipart/form-data')
-
-@pytest.fixture
-def accept_form_urlencoded(request):
-    return accept_mimetype('application/x-www-form-urlencoded')
-
-@pytest.fixture
-def accept_json(request):
-    return accept_mimetype('application/json')
-
-@pytest.fixture(params=['*', '*/*'])
-def accept_any(request):
-    return accept_mimetype(request.param)
+@mock.patch.dict(os.environ, {'WEBSERVER_PORT':'5000'})
+@mock.patch.dict(os.environ, {'KAFKA_HOST':'localhost'})
+@mock.patch.dict(os.environ, {'CASSANDRA_HOST':'localhost'})
+def app(cluster, producer):
+    return create_app(cluster.connect(), producer)
 
 def test_index(client):
     assert client.get(url_for('index')).status_code == 200
