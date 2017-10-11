@@ -1,11 +1,13 @@
 version: '3'
 services:
   web:
-    build: ./webserver/.
+    build:
+      context: .
+      dockerfile: webserver/Dockerfile
     image: webserver
     environment:
       - WEBSERVER_PORT=5000
-      - CASSANDRA_HOST=0.0.0.0
+      - CASSANDRA_HOST=127.0.0.1
       - KAFKA_HOST=34.214.200.68
     depends_on:
       - cassandra
@@ -13,10 +15,12 @@ services:
       - "5000:5000"
 
   consumer:
-    build: ./consumer/.
+    build:
+      context: .
+      dockerfile: consumer/Dockerfile
     image: consumer
     environment:
-      - CASSANDRA_HOST=0.0.0.0
+      - CASSANDRA_HOST=127.0.0.1
       - KAFKA_HOST=34.214.200.68
     depends_on:
       - cassandra
@@ -24,4 +28,4 @@ services:
   cassandra:
     image: "cassandra:latest"
     environment:
-      - CASSANDRA_LISTEN_ADDRESS=0.0.0.0
+      - CASSANDRA_LISTEN_ADDRESS=127.0.0.1
