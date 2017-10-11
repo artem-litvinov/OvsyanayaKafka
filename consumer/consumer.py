@@ -5,7 +5,7 @@ from kafka import KafkaConsumer
 class Consumer():
     def __init__(self, host='localhost', port='9092'):
         self.__address = "%s:%s" % (host, port)
-        self.consumer = KafkaConsumer(bootstrap_servers=self.__address)
+        self.consumer = KafkaConsumer(bootstrap_servers=self.__address, group_id="test")
 
     def subscribe(self, topic):
         self.consumer.subscribe(topic)
