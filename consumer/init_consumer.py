@@ -30,7 +30,7 @@ def deserialize_msg(msg):
     deserialize(kafka_message, msg.value)
     return kafka_message
 
-def message_handler(session, sns_client, kafka_msg):
+def kafka_message_handler(session, sns_client, kafka_msg):
     kafka_msg = deserialize_msg(kafka_msg)
     msg = get_message_data(kafka_msg.mid, session)
     user = get_user_data(msg.uid, session)
@@ -57,5 +57,5 @@ if __name__ == "__main__":
     sns_client = boto3.client("sns", region_name='us-west-2')
 
     for kafka_msg in consumer.messages('test-topic'):
-        message_handler(session, sns_client, kafka_msg)
+        kafka_message_handler(session, sns_client, kafka_msg)
         
