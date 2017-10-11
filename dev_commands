@@ -46,11 +46,11 @@ sudo docker push artlitvinov/akvelon:kafka_webserver
 
 # BUILD AND PUSH CASSANDRA
 
-sudo docker build -t kafka_webserver -f webserver/Dockerfile . && \
+sudo docker build -t kafka_cassandra -f cassandra/Dockerfile . && \
 
-sudo docker tag kafka_webserver artlitvinov/akvelon:kafka_webserver && \
+sudo docker tag kafka_cassandra artlitvinov/akvelon:kafka_cassandra && \
 
-sudo docker push artlitvinov/akvelon:kafka_webserver
+sudo docker push artlitvinov/akvelon:kafka_cassandra
 
 # RM ALL CONTAINERS
 

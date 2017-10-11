@@ -26,8 +26,15 @@ services:
       mode: replicated
       replicas: 3
 
+  cassandra_prepare:
+    image: cassandra_prepare
+    build: ./cassandra_prepare
+    restart: on-failure
+    depends_on:
+      - cassandra
+
   cassandra:
-    image: "cassandra:latest"
+    image: "cassandra"
     environment:
       MAX_HEAP_SIZE: 2G
       HEAP_NEWSIZE: 1G
