@@ -7,22 +7,39 @@ from flask import url_for
 from pytest_flask.fixtures import client
 from webserver.app import create_app
 
-class Row():
-    def __init__(self, params={
-                    'uid': '1',
-                    'name': 'test.name',
-                    'type': 'test.type',
-                    'contact': 'test.contact',
-                }):
-        self.uid = params["uid"]
-        self.name = params["name"]
-        self.type = params["type"]
-        self.contact = params["contact"]
+class UserRow():
+    def __init__(self, 
+                    uid = '1',
+                    name = 'test.name',
+                    u_type = 'test.type',
+                    contact = 'test.contact',
+                ):
+        self.uid = uid
+        self.name = name
+        self.type = u_type
+        self.contact = contact
+
+class MsgRow():
+    def __init__(self,
+                    mid = '1',
+                    date = 'test.date',
+                    status = 'test.status',
+                    text = 'test.test',
+                    uid = '1'
+                ):
+        self.mid = mid
+        self.date = date
+        self.status = status
+        self.text = text
+        self.uid = uid
 
 class Session():
-    def execute(self, *args, **kvargs):
-        print(args, kvargs)
-        return [Row(), Row(), Row()]
+    def execute(self, request, *args, **kvargs):
+        if "users" in request:
+            return [UserRow(), UserRow(), UserRow()]
+
+        if "messages" in request:
+            return [MsgRow('1'), MsgRow('2'), MsgRow('3')]
 
 class CassandraCluster():
     def connect(self, *args, **kvargs):
@@ -32,7 +49,7 @@ class Producer():
     def send(self, *args, **kvargs):
         print(args, kvargs)
 
-@pytest.fixture(scope="module")
+@pytest.fixture
 def cluster():
     return CassandraCluster()
 
