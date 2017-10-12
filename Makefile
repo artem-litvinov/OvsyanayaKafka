@@ -3,11 +3,6 @@
 install:
 	pipenv install
 
-environment_variables:
-	export WEBSERVER_PORT=5000
-	export KAFKA_HOST=34.214.200.68
-	export CASSANDRA_HOST=172.17.0.2
-
 thrift_for_consumer:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
 
