@@ -8,4 +8,4 @@ ENV CASSANDRA_HOST 0.0.0.0
 WORKDIR /app
 ADD . /app
 
-CMD ["python", "init_consumer.py"]
+CMD python init_consumer.py --log=DEBUG
