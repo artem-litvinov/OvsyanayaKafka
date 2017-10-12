@@ -34,8 +34,7 @@ def kafka_message_handler(session, sns_client, kafka_msg):
     kafka_msg = deserialize_msg(kafka_msg)
     msg = get_message_data(kafka_msg.mid, session)
     user = get_user_data(msg.uid, session)
-    print "To: %s. Message: '%s'." % (user.contact, msg.text)
-    #send_msg(sns_client, user.contact, msg.text)
+    print "send_msg(sns_client, %s, %s)" % (user.contact, msg.text)
 
 
 if __name__ == "__main__":

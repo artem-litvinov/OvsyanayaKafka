@@ -8,16 +8,16 @@ from tests.test_webserver_app import cluster
 from consumer.kafka_message.ttypes import KafkaMessage
 from consumer.init_consumer import kafka_message_handler
 
-class KafkaMessageEumeration():
-    def __init__(self, n):
-        self.n = n
+class KafkaMessageEnumeration():
+    def __init__(self, count):
+        self.count = count
         self.num = 1
     
     def __iter__(self):
         return self
 
     def next(self):
-        if self.num <= self.n:
+        if self.num <= self.count:
             cur, self.num = str(self.num), self.num+1
             msg = KafkaMessage(cur)
             s_msg = serialize(msg)
@@ -31,7 +31,7 @@ class DictionaryMock(object):
 
 class FakeConsumer():
     def messages(self, *args, **kvargs):
-        return KafkaMessageEumeration(3)
+        return KafkaMessageEnumeration(3)
 
 @pytest.fixture
 def fake_consumer():
