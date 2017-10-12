@@ -47,6 +47,8 @@ services:
     image: cassandra_prepare
     build: ./cassandra_prepare
     restart: on-failure
+    environment:
+      - CASSANDRA_HOST=172.20.0.2
     depends_on:
       - cassandra
 
