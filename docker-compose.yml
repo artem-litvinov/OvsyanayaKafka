@@ -13,8 +13,8 @@ services:
     ports:
       - "5000:5000"
 
-  consumer:
-    image: consumer
+  consumer1:
+    image: consumer1
     build: ./consumer
     restart: on-failure
     environment:
@@ -22,9 +22,26 @@ services:
       - KAFKA_HOST=34.214.200.68
     depends_on:
       - cassandra
-    deploy:
-      mode: replicated
-      replicas: 3
+
+  consumer2:
+    image: consumer2
+    build: ./consumer
+    restart: on-failure
+    environment:
+      - CASSANDRA_HOST=172.20.0.2
+      - KAFKA_HOST=34.214.200.68
+    depends_on:
+      - cassandra
+
+  consumer3:
+    image: consumer3
+    build: ./consumer
+    restart: on-failure
+    environment:
+      - CASSANDRA_HOST=172.20.0.2
+      - KAFKA_HOST=34.214.200.68
+    depends_on:
+      - cassandra
 
   cassandra_prepare:
     image: cassandra_prepare
@@ -38,6 +55,7 @@ services:
     environment:
       MAX_HEAP_SIZE: 2G
       HEAP_NEWSIZE: 1G
+      CASSANDRA_LISTEN_ADDRESS: 172.20.0.2
     deploy:
       resources:
         limits:

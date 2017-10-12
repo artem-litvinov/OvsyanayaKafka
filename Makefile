@@ -38,4 +38,5 @@ cassandra_image:
 	docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
 
 compose: thrift_for_consumer thrift_for_webserver
-	docker-compose up --build
+	docker-compose down --remove-orphans
+	docker-compose up --build 
