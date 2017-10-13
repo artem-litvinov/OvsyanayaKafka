@@ -39,4 +39,4 @@ cassandra_image:
 
 compose: thrift_for_consumer thrift_for_webserver
 	docker-compose down --remove-orphans
-	docker-compose up --build 
+	docker-compose up --build
