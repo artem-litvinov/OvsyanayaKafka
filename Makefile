@@ -1,4 +1,4 @@
-.PHONY : install tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver consumer_image webserver_image
+.PHONY : install compose tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver consumer_image webserver_image
 
 install:
 	pipenv install
@@ -20,14 +20,18 @@ webserver: thrift_for_webserver
 	cd webserver && pipenv run python app.py
 
 cassandra:
-	sudo service cassandra start
-	cd cassandra && sudo cqlsh -f prepare.cql
-	
+	service cassandra start
+	cd cassandra && cqlsh -f prepare.cql
+
 consumer_image: thrift_for_consumer
-	sudo docker build -t kafka_consumer -f consumer/Dockerfile ./consumer
+	docker build -t kafka_consumer -f consumer/Dockerfile ./consumer
 
 webserver_image: thrift_for_webserver
-	sudo docker build -t kafka_webserver -f webserver/Dockerfile ./webserver
+	docker build -t kafka_webserver -f webserver/Dockerfile ./webserver
 
 cassandra_image:
-	sudo docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
+	docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
+
+compose: thrift_for_consumer thrift_for_webserver
+	docker-compose down --remove-orphans
+	docker-compose up --build 

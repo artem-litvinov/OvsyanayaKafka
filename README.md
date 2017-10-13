@@ -16,6 +16,10 @@
 
     make tests
 
+## Run instances
+
+    make compose
+
 ## Launch Amazon EC2 Instance
 - Create EC2 Ubuntu instance as described [here](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EC2_GetStarted.html#ec2-launch-instance)
 - Go to security group and create "Inbound" rule that will open 9092 port to all sources.

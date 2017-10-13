@@ -1,5 +1,5 @@
 import os
-#import boto3
+import boto3
 
 from consumer import Consumer
 from kafka_message.ttypes import KafkaMessage
@@ -7,29 +7,35 @@ from thrift.TSerialization import deserialize
 from cassandra.cluster import Cluster
 
 
-def callback(msg, session):
+def send_msg(client, contact, text):
+    print client.publish(
+        TopicArn="test-topic", 
+        Message=text
+        )
+
+def get_user_data(uid, session):
+        user_rows = session.execute("SELECT * FROM users WHERE uid='%s'" % (uid))
+
+        for user_row in user_rows:
+            return user_row
+
+def get_message_data(mid, session):
+    msg_rows = session.execute("SELECT * FROM messages WHERE mid='%s'" % (mid))
+
+    for msg_row in msg_rows:
+        return msg_row
+
+def deserialize_msg(msg):
     kafka_message = KafkaMessage()
     deserialize(kafka_message, msg.value)
-    print kafka_message
-    
-    #client = boto3.client("sns")
+    return kafka_message
 
-    m_rows = session.execute("SELECT * FROM messages WHERE mid='%s'" % (kafka_message.mid))
+def kafka_message_handler(session, sns_client, kafka_msg):
+    kafka_msg = deserialize_msg(kafka_msg)
+    msg = get_message_data(kafka_msg.mid, session)
+    user = get_user_data(msg.uid, session)
+    print "send_msg(sns_client, %s, %s)" % (user.contact, msg.text)
 
-    for m_row in m_rows:
-        print m_row
-
-        u_rows = session.execute("SELECT * FROM users WHERE uid='%s'" % (m_row.uid))
-
-        for u_row in u_rows:
-            print u_row
-
-
-            # print self.__client.publish(
-            #     TopicArn=self.__topic_arn,
-            #     Message=kafka_message.message
-            # )
-            session.execute("UPDATE messages SET status='sent' WHERE mid='%s'" % (m_row.mid))
 
 if __name__ == "__main__":
     try:
@@ -47,5 +53,8 @@ if __name__ == "__main__":
     cluster = Cluster([CASSANDRA_HOST])
     session = cluster.connect('users')
     consumer = Consumer(KAFKA_HOST, '9092')
-    for msg in consumer.messages('test-topic'):
-        callback(msg, session)
+    sns_client = boto3.client("sns", region_name='us-west-2')
+
+    for kafka_msg in consumer.messages('test-topic'):
+        kafka_message_handler(session, sns_client, kafka_msg)
+        
