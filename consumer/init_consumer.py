@@ -14,10 +14,10 @@ def send_msg(client, contact, text):
         )
 
 def get_user_data(uid, session):
-        user_rows = session.execute("SELECT * FROM users WHERE uid='%s'" % (uid))
+    user_rows = session.execute("SELECT * FROM users WHERE uid='%s'" % (uid))
 
-        for user_row in user_rows:
-            return user_row
+    for user_row in user_rows:
+        return user_row
 
 def get_message_data(mid, session):
     msg_rows = session.execute("SELECT * FROM messages WHERE mid='%s'" % (mid))

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>{{title}}</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="pub/styles/common.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <form action="/send">
+        <h3>{{title}}</h3>
+        <p>
+            <label for="users">Select user:</label>
+            <select id="users">
+            </select>
+        </p>
+        <p><input type="text" id="message" placeholder="Your message"></p>
+        <p><button type="submit">{{title}}</button></p>
+    </form>
+    <script>
+        var form = document.querySelector('form');
+        form.addEventListener('submit', send_message);
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET','/user/all');
+        xhr.send();
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState != 4) return;
+            if (xhr.status != 200) {
+                alert(xhr.status + ': ' + xhr.statusText);
+            } else {
+                try {
+                    var data = JSON.parse(xhr.responseText);
+                    var users = document.querySelector("#users");
+                    users.innerHTML = data.map(el => [
+                            '<option value="'+el.uid+'">',
+                            el.name,
+                            '</option>'
+                        ].join('')
+                    ).join('');
+                } catch (e) {
+                    console.error(e);
+                }
+            }
+        };
+        function send_message(e) {
+            e.preventDefault();
+            var form = e.target;
+            if (!form.querySelector('#message').value) return alert('Empty message!');
+            xhr.open('POST','/send');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                'uid': form.querySelector('#users').value,
+                'message': form.querySelector('#message').value
+            }));
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState != 4) return;
+                if (xhr.status != 200) {
+                    alert(xhr.status + ': ' + xhr.statusText);
+                } else {
+                    console.log(xhr.responseText);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
