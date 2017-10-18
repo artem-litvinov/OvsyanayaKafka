@@ -14,20 +14,15 @@ tests: thrift_for_consumer thrift_for_webserver
 	pipenv run py.test -s -v
 
 consumer: thrift_for_consumer
-	cd consumer && pipenv run python init_consumer.py port=9092 host=34.214.200.68
+	cd consumer && pipenv run python init_consumer.py
 
 webserver: thrift_for_webserver
-	cd webserver && python app.py
+	cd webserver && pipenv run python app.py
 
 cassandra:
 	service cassandra start
 	cd cassandra && cqlsh -f prepare.cql
 
-build_and_push_consumer:
-	docker build -t kafka_consumer -f consumer/Dockerfile . && \
-	docker tag kafka_consumer artlitvinov/akvelon:kafka_consumer && \
-	docker push artlitvinov/akvelon:kafka_consumer
-	
 consumer_image: thrift_for_consumer
 	docker build -t kafka_consumer -f consumer/Dockerfile ./consumer
 
