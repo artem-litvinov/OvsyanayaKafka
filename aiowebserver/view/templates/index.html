@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="pub/styles/common.css">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{title}}</title>
+</head>
+<body>
+    <form action="/user">
+        <h3>{{title}}</h3>
+        <input type="hidden" id="type" value="email">
+        <p id="status_text"></p>
+        <p><input type="text" id="name" placeholder="User name"></p>
+        <p><input type="email" id="contact" placeholder="User email"></p>
+        <p><button type="submit">{{title}}</button></p>
+    </form>
+    <script>
+        var form = document.querySelector('form');
+        var xhr = new XMLHttpRequest();
+        var status_text = document.querySelector('#status_text');
+        form.addEventListener('submit', create_user);
+        function create_user(e) {
+            e.preventDefault();
+            var form = e.target;
+            if (!form.querySelector('#name').value || !form.querySelector('#contact').value) return alert('Empty name or email!');
+            xhr.open('POST','/user');
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify({
+                'name': form.querySelector('#name').value,
+                'type': form.querySelector('#type').value,
+                'contact': form.querySelector('#contact').value
+            }));
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState != 4) return;
+                status_text.style.display = 'block';
+                if (xhr.status != 200) {
+                    status_text.classList.add('error');
+                    status_text.innerHTML = xhr.status + ': ' + xhr.statusText;
+                } else {
+                    status_text.classList.add('success');
+                    status_text.innerHTML = 'Created user id: ' + xhr.responseText;
+                    console.log(xhr.responseText);
+                }
+                setTimeout(function(){
+                    status_text.classList.remove('error');
+                    status_text.classList.remove('success');
+                    status_text.style.display = 'none';
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>

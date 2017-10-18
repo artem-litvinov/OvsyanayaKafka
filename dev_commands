@@ -67,3 +67,7 @@ git checkout master
 git pull
 git branch -d branch_name # deletes local branch
 git push origin --delete branch_name # deletes remote branch
+
+# VENV
+virtualenv -p python3 .env
+source .env/bin/activate

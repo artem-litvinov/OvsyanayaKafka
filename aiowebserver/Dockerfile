@@ -1,6 +1,6 @@
-FROM python:2.7-slim
+FROM python:3.5-slim
 
-RUN pip install flask thrift kafka-python cassandra-driver
+RUN pip install thrift aiohttp aiokafka aiocassandra
 
 ENV KAFKA_HOST 0.0.0.0
 ENV WEBSERVER_PORT 5000
