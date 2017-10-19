@@ -9,25 +9,33 @@ class AIOCassandra(object):
     def __init__(self, host='localhost'):
         self.__cluster = Cluster([host])
     
-    def connect(self, loop, keyspace='default'):
+    def connect(self, loop=asyncio.get_event_loop(), keyspace='default'):
         if loop is None:
             loop = asyncio.get_event_loop()
         self.__session = self.__cluster.connect(keyspace)
-        aiocassandra.aiosession(self.__session, loop=loop)
+        aiosession(self.__session, loop=loop)
 
     async def get_from_table_by_id(self, table, id):
-        if not table or not id:
+        if (table is None) or (id is None):
             raise RuntimeError('table or id is None')
         return await (self.__session.execute_future("SELECT * FROM %s WHERE uid='%s'" % (table, id)))
 
-async def main():
+    async def exec_query(self, query):
+        if query is None:
+            raise RuntimeError('query is None')
+        return await (self.__session.execute_future(query))
+
+def create_cassandra():
     try:
         CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
     except KeyError as err:
         print(err, "Please set CASSANDRA_HOST environment variable")
         # raise
-        CASSANDRA_HOST = 'localhost'
-    cassandra = AIOCassandra(CASSANDRA_HOST)
+        CASSANDRA_HOST='localhost'
+    return AIOCassandra(CASSANDRA_HOST)
+
+async def main():
+    cassandra = create_cassandra()
     cassandra.connect(loop, keyspace='users')
     print((await cassandra.get_from_table_by_id('users', '1')))
 
