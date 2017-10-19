@@ -6,6 +6,7 @@ from thrift.TSerialization import serialize
 from kafka_message.ttypes import KafkaMessage
 
 loop = asyncio.get_event_loop()
+
 class AIOProducer(object):
     def __init__(self, loop, host='localhost', port='9092'):
         if loop is None:
@@ -32,6 +33,8 @@ async def main():
     producer = create_producer()
     await producer.send('test-topic', '1507300909746')
 
+
 if __name__ == "__main__":
+    print('entering test producer')
     loop.run_until_complete(main())
     loop.close()
