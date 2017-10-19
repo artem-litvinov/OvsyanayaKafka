@@ -3,6 +3,7 @@ import asyncio
 from aiokafka import AIOKafkaConsumer
 
 loop = asyncio.get_event_loop()
+
 class AIOConsumer(object):
     def __init__(self, loop, host='localhost', port='9092', topic='test-topic', group='test-group'):
         if loop is None:
@@ -23,7 +24,6 @@ def create_consumer():
     return AIOConsumer(loop, KAFKA_HOST, '9092')
 
 async def main():
-    print('entering test')
     consumer = create_consumer()
     m_stream = await consumer.consume()
     try:
@@ -34,5 +34,6 @@ async def main():
 
 
 if __name__ == '__main__':
+    print('entering test consumer')
     loop.run_until_complete(main())
     loop.close()
