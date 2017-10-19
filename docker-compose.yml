@@ -1,8 +1,8 @@
 version: '3'
 services:
   web:
-    image: webserver
-    build: ./webserver
+    image: aiowebserver
+    build: ./aiowebserver
     restart: on-failure
     environment:
       - WEBSERVER_PORT=5000
