@@ -27,6 +27,8 @@ def create_producer():
         KAFKA_HOST = os.environ['KAFKA_HOST']
     except KeyError as err:
         print(err, "Please set KAFKA_HOST environment variable")
+        KAFKA_HOST='34.214.200.68'
+
     return AIOProducer(loop, KAFKA_HOST, '9092')
 
 async def main():

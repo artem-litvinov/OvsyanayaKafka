@@ -1,6 +1,6 @@
 FROM python:3.5-slim
 
-RUN pip install thrift aiohttp aiokafka aiocassandra
+RUN pip install thrift aiohttp aiokafka aiocassandra aiohttp_jinja2
 
 ENV KAFKA_HOST 0.0.0.0
 ENV WEBSERVER_PORT 5000

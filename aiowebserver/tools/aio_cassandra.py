@@ -7,7 +7,7 @@ loop = asyncio.get_event_loop()
 
 class AIOCassandra(object):
     def __init__(self, host='localhost'):
-        self.__cluster = Cluster([host])
+        self.__cluster = Cluster([host],executor_threads=3)
     
     def connect(self, loop=asyncio.get_event_loop(), keyspace='default'):
         if loop is None:
