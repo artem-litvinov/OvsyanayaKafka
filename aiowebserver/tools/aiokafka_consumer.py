@@ -1,6 +1,8 @@
 import os
 import asyncio
 from aiokafka import AIOKafkaConsumer
+from thrift.TSerialization import serialize
+from kafka_message.ttypes import KafkaMessage
 
 loop = asyncio.get_event_loop()
 
@@ -26,9 +28,13 @@ def create_consumer():
 async def main():
     consumer = create_consumer()
     m_stream = await consumer.consume()
+    kafka_message = KafkaMessage()
+    deserialize(kafka_message, msg.value)
     try:
         async for msg in m_stream:
             print("consumed: ", msg.topic, msg.partition, msg.offset, msg.key, msg.value, msg.timestamp)
+            deserialize(kafka_message, msg.value)
+            print(kafka_message)
     finally:
         await consumer.stop()
 
