@@ -1,4 +1,4 @@
-FROM python:3.5-slim
+FROM python:3.5.2
 
 RUN pip install thrift aiohttp aiokafka aiocassandra aiohttp_jinja2
 
