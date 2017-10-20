@@ -9,9 +9,6 @@ thrift_for_consumer:
 thrift_for_webserver:
 	thrift -r -out webserver --gen py thrift/kafka_message.thrift
 
-thrift_for_aiowebserver:
-	thrift -r -out aiowebserver/tools --gen py thrift/kafka_message.thrift
-
 tests: thrift_for_consumer thrift_for_webserver
 	pipenv install -d
 	pipenv run py.test -s -v
@@ -35,6 +32,6 @@ webserver_image: thrift_for_webserver
 cassandra_image:
 	docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
 
-compose: thrift_for_consumer thrift_for_aiowebserver
+compose: thrift_for_consumer thrift_for_webserver
 	docker-compose down --remove-orphans
 	docker-compose up --build

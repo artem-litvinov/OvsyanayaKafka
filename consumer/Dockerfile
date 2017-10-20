@@ -1,4 +1,4 @@
-FROM python:2.7-slim
+FROM python:3.5.2
 
 RUN pip install thrift kafka-python cassandra-driver boto3
 

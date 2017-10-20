@@ -18,7 +18,7 @@ class AIOCassandra(object):
     async def get_from_table_by_id(self, table, id):
         if (table is None) or (id is None):
             raise RuntimeError('table or id is None')
-        return await (self.__session.execute_future("SELECT * FROM %s WHERE uid='%s'" % (table, id)))
+        return await (self.__session.execute_future("SELECT * FROM %s WHERE id='%s'" % (table, id)))
 
     async def exec_query(self, query):
         if query is None:

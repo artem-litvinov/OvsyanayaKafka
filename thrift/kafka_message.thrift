@@ -1,3 +1,3 @@
 struct KafkaMessage {
-   1: string mid
+   1: string id
 }
