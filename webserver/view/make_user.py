@@ -9,7 +9,7 @@ cassandra.connect(keyspace='users')
 
 async def create_user(req):
     uid = str(int(round(time.time() * 1000)))
-    query = "INSERT INTO users (uid, name, type, contact) VALUES ('%s', '%s', '%s', '%s')" % (uid, req['name'],  req['type'], req['contact'])
+    query = "INSERT INTO users (id, name, type, contact) VALUES ('%s', '%s', '%s', '%s')" % (uid, req['name'],  req['type'], req['contact'])
     return await cassandra.exec_query(query)
 
 async def make_user(request):

@@ -11,7 +11,7 @@ cassandra.connect(keyspace='users')
 async def get_user(id):
     user = (await cassandra.get_from_table_by_id('users', id))[0]
     user = {
-        'id': user.uid,
+        'id': user.id,
         'type': user.type,
         'name': user.name,
         'contact': user.contact,
@@ -23,7 +23,7 @@ async def get_all_users():
     users = []
     for row in rows:
         users.append({
-            'id': row.uid,
+            'id': row.id,
             'type': row.type,
             'name': row.name,
             'contact': row.contact,

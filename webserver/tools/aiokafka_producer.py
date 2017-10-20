@@ -1,9 +1,9 @@
-import os
 import time
+import os, sys
 import asyncio
 from aiokafka import AIOKafkaProducer
 from thrift.TSerialization import serialize
-from kafka_message.ttypes import KafkaMessage
+from tools.kafka_message.ttypes import KafkaMessage
 
 loop = asyncio.get_event_loop()
 

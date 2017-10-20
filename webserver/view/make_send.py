@@ -11,8 +11,8 @@ producer = create_producer()
 
 async def create_message(req):
     mid = str(int(round(time.time() * 1000)))
-    query = "INSERT INTO messages (mid, uid, date, text, status) VALUES ('%s', '%s', '%s', '%s', '%s')" % (mid, req["uid"],  str(time.time()), req["message"], "sending")
-    await producer.send('test-topic', 'message %s sent' % mid)
+    query = "INSERT INTO messages (id, uid, date, text, status) VALUES ('%s', '%s', '%s', '%s', '%s')" % (mid, req["uid"],  str(time.time()), req["message"], "sending")
+    await producer.send('test-topic', mid)
     return await cassandra.exec_query(query)
 
 async def make_send(request):
