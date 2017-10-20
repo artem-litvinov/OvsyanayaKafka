@@ -1,1 +1,1 @@
-__all__ = ['aiocassandra', 'aiokafka_consumer', 'aiokafka_producer']
+__all__ = ['aio_cassandra', 'aiokafka_consumer', 'aiokafka_producer', 'kafka_message']
