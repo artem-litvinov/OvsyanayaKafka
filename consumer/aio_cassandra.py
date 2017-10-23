@@ -30,8 +30,7 @@ def create_cassandra():
         CASSANDRA_HOST = os.environ['CASSANDRA_HOST']
     except KeyError as err:
         print(err, "Please set CASSANDRA_HOST environment variable")
-        # raise
-        CASSANDRA_HOST='localhost'
+        raise
     return AIOCassandra(CASSANDRA_HOST)
 
 async def main():
