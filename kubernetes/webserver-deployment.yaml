@@ -1,0 +1,26 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: webserver
+spec:
+  selector:
+    matchLabels:
+      app: webserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: webserver
+    spec:
+      containers:
+      - name: webserver
+        image: artlitvinov/kafka-webserver:latest
+        env:
+        - name: KAFKA_HOST
+          value: "kafka"
+        - name: CASSANDRA_HOST
+          value: "cassandra"
+        - name: WEBSERVER_PORT
+          value: "5000"
+        ports:
+        - containerPort: 5000

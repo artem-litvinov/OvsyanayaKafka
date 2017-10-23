@@ -21,22 +21,35 @@ webserver: thrift_for_webserver
 
 cassandra:
 	service cassandra start
-	cd cassandra && cqlsh -f prepare.cql
-
-build_and_push_consumer:
-	docker build -t kafka_consumer -f consumer/Dockerfile . && \
-	docker tag kafka_consumer artlitvinov/akvelon:kafka_consumer && \
-	docker push artlitvinov/akvelon:kafka_consumer
+	cd cassandra-prepare && cqlsh -f prepare.cql
 	
 consumer_image: thrift_for_consumer
-	docker build -t kafka_consumer -f consumer/Dockerfile ./consumer
+	docker build -t kafka-consumer -f consumer/Dockerfile ./consumer && \
+	docker tag kafka-consumer artlitvinov/kafka-consumer:latest
 
 webserver_image: thrift_for_webserver
-	docker build -t kafka_webserver -f webserver/Dockerfile ./webserver
+	docker build -t kafka-webserver -f webserver/Dockerfile ./webserver && \
+	docker tag kafka-webserver artlitvinov/kafka-webserver:latest
 
-cassandra_image:
-	docker build -t kafka_cassandra -f cassandra/Dockerfile ./cassandra
+cassandra_prepare_image:
+	docker build -t cassandra-prepare -f cassandra-prepare/Dockerfile ./cassandra-prepare && \
+	docker tag cassandra-prepare artlitvinov/cassandra-prepare:latest
 
 compose: thrift_for_consumer thrift_for_webserver
 	docker-compose down --remove-orphans
 	docker-compose up --build
+
+kubernetes:
+	kubectl create --save-config -f kubernetes/cassandra-service.yaml
+	kubectl create --save-config -f kubernetes/local-volumes.yaml
+	kubectl create --save-config -f kubernetes/cassandra-statefulset.yaml
+	kubectl create --save-config -f kubernetes/cassandra-prepare-job.yaml
+
+	kubectl create --save-config -f kubernetes/kafka-service.yaml
+	kubectl create --save-config -f kubernetes/kafka-deployment.yaml
+
+	kubectl create --save-config -f kubernetes/webserver-service.yaml
+	kubectl create --save-config -f kubernetes/webserver-deployment.yaml
+
+	kubectl create --save-config -f kubernetes/consumer-deployment.yaml
+	

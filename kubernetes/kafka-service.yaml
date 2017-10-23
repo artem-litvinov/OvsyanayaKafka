@@ -1,0 +1,19 @@
+kind: Service
+apiVersion: v1
+metadata:
+  labels:
+    app: kafka
+  name: kafka
+spec:
+  clusterIP: None
+  ports:
+    - protocol: TCP
+      port: 9092
+      targetPort: 9092
+      name: "kafka"
+    - protocol: TCP
+      port: 2181
+      targetPort: 2181
+      name: "zookeeper"
+  selector:
+    app: kafka

@@ -6,6 +6,7 @@ class Consumer():
     def __init__(self, host='localhost', port='9092'):
         self.__address = "%s:%s" % (host, port)
         self.consumer = KafkaConsumer(bootstrap_servers=self.__address, group_id="test")
+        print "Created for: %s" % (self.__address,)
 
     def subscribe(self, topic):
         self.consumer.subscribe(topic)

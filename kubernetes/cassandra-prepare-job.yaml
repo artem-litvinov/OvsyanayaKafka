@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cassandra-prepare
+spec:
+  template:
+    metadata:
+      name: cassandra-prepare
+    spec:
+      containers:
+      - name: cassandra-prepare
+        image: artlitvinov/cassandra-prepare:latest
+        env:
+        - name: CASSANDRA_HOST
+          value: "cassandra"
+      restartPolicy: OnFailure

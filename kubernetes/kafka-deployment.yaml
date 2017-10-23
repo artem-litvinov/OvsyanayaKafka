@@ -1,0 +1,29 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: kafka
+spec:
+  selector:
+    matchLabels:
+      app: kafka
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kafka
+    spec:
+      containers:
+      - name: kafka
+        image: spotify/kafka
+        imagePullPolicy: Always
+        env:
+        - name: ADVERTISED_HOST
+          value: "kafka"
+        - name: ADVERTISED_PORT
+          value: "9092"
+        - name: KAFKA_HEAP_OPTS
+          value: "-Xmx256M -Xms256M"
+        - name: NUM_PARTITIONS
+          value: "3"
+        ports:
+        - containerPort: 9092

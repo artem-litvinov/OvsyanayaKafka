@@ -1,0 +1,23 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: consumer
+spec:
+  selector:
+    matchLabels:
+      app: consumer
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: consumer
+    spec:
+      containers:
+      - name: consumer
+        image: artlitvinov/kafka-consumer:latest
+        imagePullPolicy: Always
+        env:
+        - name: KAFKA_HOST
+          value: "kafka"
+        - name: CASSANDRA_HOST
+          value: "cassandra"

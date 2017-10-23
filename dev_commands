@@ -60,10 +60,43 @@ sudo docker rm -f $(sudo docker ps -aq)
 # PULL REQUEST EXAMPLE
 
 git checkout -b branch_name # creates new branch
-...commit...
-git push origin branch_name # creates pull request
-...merge...
-git checkout master
-git pull
-git branch -d branch_name # deletes local branch
-git push origin --delete branch_name # deletes remote branch
+
+- COMMIT
+    git push origin branch_name # creates pull request
+
+- MERGE
+    git checkout master
+    git pull
+    git branch -d branch_name # deletes local branch
+    git push origin --delete branch_name # deletes remote branch
+
+# KUBERNETES COMMANDS
+
+- BUILD
+	minikube start
+    make kubernetes
+
+- DEV BUILD
+    eval $(minikube docker-env) - build the image using the same Docker host as the Minikube VM
+    kubectl create -f FILENAME --record
+
+- CHANGE
+    kubectl apply -f FILENAME
+    kubectl set image deployment/DEP_NAME CONTAINER_NAME=CONTAINER_IMAGE:v2 - update
+    kubectl rollout undo deployment/nginx-deployment - rolling back
+    kubectl exec -ti POD_NAME cqlsh
+
+- SCALE
+    kubectl scale deployment nginx-deployment --replicas=10
+    kubectl autoscale deployment nginx-deployment --min=10 --max=15 --cpu-percent=80
+
+- MONITORING
+    kubectl rollout history deployment/DEP_NAME
+    kubectl get pods
+    kubectl logs -f POD_NAME
+    minikube service webserver
+
+- CLEAN UP
+    kubectl delete service SERVICE_NAME
+    kubectl delete deployment POD_NAME --all
+    minikube stop
