@@ -22,7 +22,7 @@ def create_consumer(topic, group):
         KAFKA_HOST = os.environ['KAFKA_HOST']
     except KeyError as err:
         print(err, "Please set KAFKA_HOST environment variable")
-        KAFKA_HOST = '34.214.200.68'
+        raise
 
     return AIOConsumer(loop, KAFKA_HOST, '9092', topic, group)
 
