@@ -25,10 +25,5 @@ before_install:
   - docker tag cassandra-prepare artlitvinov/cassandra-prepare:latest
   - docker push artlitvinov/cassandra-prepare:latest
 
-install:
-#  - pip install thrift kafka-python cassandra-driver boto3 flask mock pytest pytest-flask pytest-timeout
-
 script:
   - echo Images pushed
-
-# - pipenv run py.test -s -v
