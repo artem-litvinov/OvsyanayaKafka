@@ -1,0 +1,34 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+before_install:
+  - sudo apt-get install thrift-compiler
+
+  - thrift -r -out consumer --gen py thrift/kafka_message.thrift
+  - thrift -r -out webserver --gen py thrift/kafka_message.thrift
+
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+
+  - docker build -t kafka-consumer -f consumer/Dockerfile ./consumer
+  - docker tag kafka-consumer artlitvinov/kafka-consumer:latest
+  - docker push artlitvinov/kafka-consumer:latest
+
+  - docker build -t kafka-webserver -f webserver/Dockerfile ./webserver
+  - docker tag kafka-webserver artlitvinov/kafka-webserver:latest
+  - docker push artlitvinov/kafka-webserver:latest
+
+  - docker build -t cassandra-prepare -f cassandra-prepare/Dockerfile ./cassandra-prepare
+  - docker tag cassandra-prepare artlitvinov/cassandra-prepare:latest
+  - docker push artlitvinov/cassandra-prepare:latest
+
+install:
+#  - pip install thrift kafka-python cassandra-driver boto3 flask mock pytest pytest-flask pytest-timeout
+
+script:
+  - echo Images pushed
+
+# - pipenv run py.test -s -v
