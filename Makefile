@@ -7,11 +7,12 @@ thrift_for_consumer:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
 
 thrift_for_webserver:
-	thrift -r -out webserver --gen py thrift/kafka_message.thrift
+	thrift -r -out webserver/tools --gen py thrift/kafka_message.thrift
 
 tests: thrift_for_consumer thrift_for_webserver
-	pipenv install -d
-	pipenv run py.test -s -v
+	pipenv --three
+	pipenv install
+	pipenv run pytest -s -v
 
 consumer: thrift_for_consumer
 	cd consumer && pipenv run python init_consumer.py port=9092 host=34.214.200.68
