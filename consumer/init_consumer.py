@@ -1,15 +1,20 @@
 import os
-import boto3
+import time
+import logging
 
 from consumer import Consumer
 from kafka_message.ttypes import KafkaMessage
+
+import boto3
 from thrift.TSerialization import deserialize
 from cassandra.cluster import Cluster
 
+if os.environ.has_key("DEBUG"):
+    logging.basicConfig(level=logging.DEBUG)
 
 def send_msg(client, contact, text):
     print client.publish(
-        TopicArn="test-topic", 
+        TopicArn="test-topic",
         Message=text
         )
 
@@ -32,8 +37,20 @@ def deserialize_msg(msg):
 
 def kafka_message_handler(session, sns_client, kafka_msg):
     kafka_msg = deserialize_msg(kafka_msg)
+    logging.debug("Received message %s from Kafka", kafka_msg)
+
     msg = get_message_data(kafka_msg.mid, session)
+    if msg is None:
+        logging.warning(
+            "Couldn't find message details for message %s", kafka_msg.mid)
+        return
+
     user = get_user_data(msg.uid, session)
+    if user is None:
+        logging.warning(
+            "Couldn't find user details for message %s", msg.uid)
+        return
+
     print "send_msg(sns_client, %s, %s)" % (user.contact, msg.text)
 
 
@@ -57,4 +74,4 @@ if __name__ == "__main__":
 
     for kafka_msg in consumer.messages('test-topic'):
         kafka_message_handler(session, sns_client, kafka_msg)
-        
+
