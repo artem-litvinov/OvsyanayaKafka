@@ -13,28 +13,7 @@ services:
     ports:
       - "5000:5000"
 
-  consumer1:
-    image: consumer1
-    build: ./consumer
-    restart: on-failure
-    environment:
-      - CASSANDRA_HOST=cassandra
-      - KAFKA_HOST=34.214.200.68
-    depends_on:
-      - cassandra
-
-  consumer2:
-    image: consumer2
-    build: ./consumer
-    restart: on-failure
-    environment:
-      - CASSANDRA_HOST=cassandra
-      - KAFKA_HOST=34.214.200.68
-    depends_on:
-      - cassandra
-
-  consumer3:
-    image: consumer3
+  consumer:
     build: ./consumer
     restart: on-failure
     environment:
