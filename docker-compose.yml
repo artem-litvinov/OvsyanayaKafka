@@ -6,7 +6,7 @@ services:
     restart: on-failure
     environment:
       - WEBSERVER_PORT=5000
-      - CASSANDRA_HOST=172.20.0.2
+      - CASSANDRA_HOST=cassandra
       - KAFKA_HOST=34.214.200.68
     depends_on:
       - cassandra
@@ -18,7 +18,7 @@ services:
     build: ./consumer
     restart: on-failure
     environment:
-      - CASSANDRA_HOST=172.20.0.2
+      - CASSANDRA_HOST=cassandra
       - KAFKA_HOST=34.214.200.68
     depends_on:
       - cassandra
@@ -28,7 +28,7 @@ services:
     build: ./consumer
     restart: on-failure
     environment:
-      - CASSANDRA_HOST=172.20.0.2
+      - CASSANDRA_HOST=cassandra
       - KAFKA_HOST=34.214.200.68
     depends_on:
       - cassandra
@@ -38,17 +38,18 @@ services:
     build: ./consumer
     restart: on-failure
     environment:
-      - CASSANDRA_HOST=172.20.0.2
+      - CASSANDRA_HOST=cassandra
       - KAFKA_HOST=34.214.200.68
     depends_on:
       - cassandra
 
   cassandra_prepare:
-    image: cassandra_prepare
     build: ./cassandra_prepare
     restart: on-failure
+    command: ./wait-for cassandra:9042 --
+      cqlsh cassandra --cqlversion="3.4.4" -f prepare.cql
     environment:
-      - CASSANDRA_HOST=172.20.0.2
+      - CASSANDRA_HOST=cassandra
     depends_on:
       - cassandra
 
@@ -57,7 +58,6 @@ services:
     environment:
       MAX_HEAP_SIZE: 2G
       HEAP_NEWSIZE: 1G
-      CASSANDRA_LISTEN_ADDRESS: 172.20.0.2
     deploy:
       resources:
         limits:
