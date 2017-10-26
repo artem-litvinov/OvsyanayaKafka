@@ -7,13 +7,18 @@ url = "https://pypi.python.org/simple"
 
 mock = "*"
 pytest = "*"
-"pytest-flask" = "*"
+"pytest-aiohttp" = "*"
+"pytest-asyncio" = "*"
 "pytest-timeout" = "*"
 
 [packages]
 
-flask = "*"
 thrift = "*"
 "boto3" = "*"
-"kafka-python" = "*"
-"cassandra-driver" = "*"
+"jinja2" = "*"
+"asyncio" = "*"
+"aiohttp" = "*"
+"aiokafka" = "*"
+"aiocassandra" = "*"
+"aiohttp_jinja2" = "*"
+"prometheus_client" = "*"
