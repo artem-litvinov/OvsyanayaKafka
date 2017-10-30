@@ -1,7 +1,9 @@
-.PHONY : install compose tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver consumer_image webserver_image
+.PHONY : install thrift compose tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver consumer_image webserver_image
 
 install:
 	pipenv install
+
+thrift: thrift_for_consumer thrift_for_webserver
 
 thrift_for_consumer:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
@@ -9,7 +11,7 @@ thrift_for_consumer:
 thrift_for_webserver:
 	thrift -r -out webserver --gen py thrift/kafka_message.thrift
 
-tests: thrift_for_consumer thrift_for_webserver
+tests: thrift
 	pipenv install -d
 	pipenv run py.test -s -v
 
