@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "51fe806864c801c89168658494f24778e7e01bb662ccc298dedcdb66fa59e999"
+            "sha256": "8eb62345f505590e8f4ab99314fb6f51b9a86498ba2e09b40dbc84bcf4077811"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -98,10 +98,10 @@
         },
         "botocore": {
             "hashes": [
-                "sha256:0b02a9426c2fa49f922c706ce25693b5ec7a06bbb12c88565fae242c6eea360c",
-                "sha256:b0aeb83761d8c22239692ad66faf08f9149ae98d62a778683cbfa54766695268"
+                "sha256:082dfdfef4462fa10a3edaee9c9e322ff867b500f33eb3ca42d2923e3659e6ff",
+                "sha256:bb9ed884e45176569c79b1b9e960f6c7c825243d7c8b6dcf119499c7c9216e4d"
             ],
-            "version": "==1.7.35"
+            "version": "==1.7.36"
         },
         "cassandra-driver": {
             "hashes": [
@@ -190,6 +190,20 @@
                 "sha256:0013d1ef25700dbfa2ea0c4fe799dd1fd72702d109467fd09a2eafa2d7e8f7e6"
             ],
             "version": "==0.0.21"
+        },
+        "py": {
+            "hashes": [
+                "sha256:2ccb79b01769d99115aa600d7eed99f524bf752bba8f041dc1c184853514655a",
+                "sha256:0f2d585d22050e90c7d293b6451c83db097df77871974d90efd5a30dc12fcde3"
+            ],
+            "version": "==1.4.34"
+        },
+        "pytest": {
+            "hashes": [
+                "sha256:81a25f36a97da3313e1125fce9e7bbbba565bc7fec3c5beb14c262ddab238ac1",
+                "sha256:27fa6617efc2869d3e969a3e75ec060375bfb28831ade8b5cdd68da3a741dc3c"
+            ],
+            "version": "==3.2.3"
         },
         "python-dateutil": {
             "hashes": [
