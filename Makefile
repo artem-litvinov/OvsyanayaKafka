@@ -1,4 +1,4 @@
-.PHONY : install compose tests consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver consumer_image webserver_image
+.PHONY : install compose tests monitoring consumer webserver cassandra clear_consumer clear_webserver clear_all thrift_for_consumer thrift_for_webserver consumer_image webserver_image
 
 install:
 	pipenv install
@@ -36,3 +36,6 @@ cassandra_image:
 compose: thrift_for_consumer thrift_for_webserver
 	docker-compose down --remove-orphans
 	docker-compose up --build
+
+monitoring:
+	docker-compose -f monitoring/docker-compose.yml up
