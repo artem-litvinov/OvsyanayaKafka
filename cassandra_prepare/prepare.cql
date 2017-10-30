@@ -1,17 +1,17 @@
-CREATE KEYSPACE users
+CREATE KEYSPACE IF NOT EXISTS users
     WITH REPLICATION = {
         'class' : 'SimpleStrategy',
         'replication_factor' : 1
     };
 
-CREATE TABLE users.users (
+CREATE TABLE IF NOT EXISTS users.users (
     id text PRIMARY KEY,
     type text,
     name text,
     contact text
 );
 
-CREATE TABLE users.messages (
+CREATE TABLE IF NOT EXISTS users.messages (
     id text PRIMARY KEY,
     uid text,
     date text,
