@@ -1,0 +1,29 @@
+sudo: required
+
+language: python
+
+services:
+  - docker
+
+before_install:
+  - sudo apt-get install thrift-compiler
+
+  - thrift -r -out consumer --gen py thrift/kafka_message.thrift
+  - thrift -r -out webserver --gen py thrift/kafka_message.thrift
+
+  - docker login -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD"
+
+  - docker build -t kafka-consumer -f consumer/Dockerfile ./consumer
+  - docker tag kafka-consumer artlitvinov/kafka-consumer:latest
+  - docker push artlitvinov/kafka-consumer:latest
+
+  - docker build -t kafka-webserver -f webserver/Dockerfile ./webserver
+  - docker tag kafka-webserver artlitvinov/kafka-webserver:latest
+  - docker push artlitvinov/kafka-webserver:latest
+
+  - docker build -t cassandra-prepare -f cassandra_prepare/Dockerfile ./cassandra_prepare
+  - docker tag cassandra-prepare artlitvinov/cassandra-prepare:latest
+  - docker push artlitvinov/cassandra-prepare:latest
+
+script:
+  - echo Images pushed
