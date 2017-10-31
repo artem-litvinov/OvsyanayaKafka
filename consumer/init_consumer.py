@@ -4,7 +4,6 @@ import logging
 
 import boto3
 import asyncio
-from consumer import Consumer
 from aio_cassandra import create_cassandra
 from aiokafka_consumer import create_consumer
 from kafka_message.ttypes import KafkaMessage
@@ -12,8 +11,11 @@ from thrift.TSerialization import deserialize
 
 loop = asyncio.get_event_loop()
 
-if os.environ.has_key("DEBUG"):
-    logging.basicConfig(level=logging.DEBUG)
+try:
+    if os.environ["DEBUG"]:
+        logging.basicConfig(level=logging.DEBUG)
+except KeyError as e:
+    logging.basicConfig(level=logging.INFO)
 
 def send_msg(client, contact, text):
     print (client.publish(

@@ -2,6 +2,7 @@ version: '3'
 services:
 
   grafana:
+    restart: always
     image: 'grafana/grafana'
     depends_on:
       - prometheus
@@ -9,7 +10,10 @@ services:
       - '3000:3000'
 
   prometheus:
+    restart: always
     image: prom/prometheus
+    links:
+      - cadvisor:cadvisor
     depends_on:
       - cadvisor
     volumes:
@@ -21,11 +25,13 @@ services:
 
   cadvisor:
     # Workaround to findutils bug
+    restart: always
     build: ./cadvisor/.
     volumes:
       - /:/rootfs:ro
       - /var/run:/var/run:rw
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
     ports:
       - '8080:8080'

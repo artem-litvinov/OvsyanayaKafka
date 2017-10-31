@@ -16,16 +16,16 @@ from thrift.transport import TTransport
 class KafkaMessage(object):
     """
     Attributes:
-     - mid
+     - id
     """
 
     thrift_spec = (
         None,  # 0
-        (1, TType.STRING, 'mid', 'UTF8', None, ),  # 1
+        (1, TType.STRING, 'id', 'UTF8', None, ),  # 1
     )
 
-    def __init__(self, mid=None,):
-        self.mid = mid
+    def __init__(self, id=None,):
+        self.id = id
 
     def read(self, iprot):
         if iprot._fast_decode is not None and isinstance(iprot.trans, TTransport.CReadableTransport) and self.thrift_spec is not None:
@@ -38,7 +38,7 @@ class KafkaMessage(object):
                 break
             if fid == 1:
                 if ftype == TType.STRING:
-                    self.mid = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
+                    self.id = iprot.readString().decode('utf-8') if sys.version_info[0] == 2 else iprot.readString()
                 else:
                     iprot.skip(ftype)
             else:
@@ -51,9 +51,9 @@ class KafkaMessage(object):
             oprot.trans.write(oprot._fast_encode(self, (self.__class__, self.thrift_spec)))
             return
         oprot.writeStructBegin('KafkaMessage')
-        if self.mid is not None:
-            oprot.writeFieldBegin('mid', TType.STRING, 1)
-            oprot.writeString(self.mid.encode('utf-8') if sys.version_info[0] == 2 else self.mid)
+        if self.id is not None:
+            oprot.writeFieldBegin('id', TType.STRING, 1)
+            oprot.writeString(self.id.encode('utf-8') if sys.version_info[0] == 2 else self.id)
             oprot.writeFieldEnd()
         oprot.writeFieldStop()
         oprot.writeStructEnd()
