@@ -1,12 +1,15 @@
 import os
 import time
-import logging
-
 import boto3
+import logging
 import asyncio
 from aio_cassandra import create_cassandra
 from aiokafka_consumer import create_consumer
 from kafka_message.ttypes import KafkaMessage
+from thrift.TSerialization import deserialize
+from consumer import Consumer
+from kafka_message.ttypes import KafkaMessage
+
 from thrift.TSerialization import deserialize
 
 loop = asyncio.get_event_loop()
@@ -28,20 +31,24 @@ def deserialize_msg(msg):
     deserialize(kafka_message, msg.value)
     return kafka_message
 
-async def get_message_data(mid, session):
-    msg_rows = await session.get_from_table_by_id("messages", str(mid))
-    if len(msg_rows) > 0:
-        return msg_rows[0]
-    return None
-
 async def get_user_data(uid, session):
     user_rows = await session.get_from_table_by_id("users", str(uid))
+    logging.debug("Received message %s from Cassandra", user_rows)
     if len(user_rows) > 0:
-        return user_rows[0]
+      return user_rows[0]
+    return None
+
+async def get_message_data(mid, session):
+    msg_rows = await session.get_from_table_by_id("messages", str(mid))
+    logging.debug("Received message %s from Cassandra", msg_rows)
+    if len(msg_rows) > 0:
+      return msg_rows[0]
     return None
 
 async def kafka_message_handler(session, sns_client, kafka_msg):
     kafka_msg = deserialize_msg(kafka_msg)
+    logging.debug("Received message %s from Kafka", kafka_msg)
+    
     msg = await get_message_data(kafka_msg.id, session)
     if msg is None:
         logging.warning(
@@ -53,7 +60,7 @@ async def kafka_message_handler(session, sns_client, kafka_msg):
         logging.warning(
             "Couldn't find user details for message %s", msg.uid)
         return
-
+    
     print("send_msg(sns_client, %s, %s)" % (user.contact, msg.text))
 
 async def main():
@@ -73,4 +80,3 @@ async def main():
 if __name__ == "__main__":
     loop.run_until_complete(main())
     loop.close()
-        
