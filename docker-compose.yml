@@ -1,10 +1,9 @@
 version: '3'
 services:
-  web:
+  webserver:
     image: webserver
     build: ./webserver
     restart: always
-    network_mode: bridge
     environment:
       - WEBSERVER_PORT=5000
       - CASSANDRA_HOST=cassandra
@@ -43,3 +42,50 @@ services:
       resources:
         limits:
           memory: 2G
+
+# Monitoring
+  grafana:
+    restart: on-failure
+    image: 'grafana/grafana'
+    env_file:
+      - ./monitoring/config.monitoring
+    depends_on:
+      - prometheus
+    ports:
+      - '3000:3000'
+  
+  grafana_prepare:
+    build: ./monitoring/grafana/.
+    links:
+      - grafana:grafana
+    depends_on:
+      - grafana
+    restart: on-failure
+
+  prometheus:
+    restart: always
+    image: prom/prometheus
+    links:
+      - cadvisor:cadvisor
+      - webserver:webserver
+    depends_on:
+      - cadvisor
+    volumes:
+        - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+        - '-config.file=/etc/prometheus/prometheus.yml'
+    ports:
+        - '9090:9090'
+
+  cadvisor:
+    # Workaround to findutils bug
+    restart: always
+    build: ./monitoring/cadvisor/.
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /dev/disk/:/dev/disk:ro
+    ports:
+      - '8080:8080'

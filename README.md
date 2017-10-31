@@ -49,3 +49,9 @@ when local cluster is running
 To start Producer you can run this on your local machine
 
     sudo docker run -it artlitvinov/akvelon:kafka_producer
+
+## Monitoring
+
+    http://localhost:3000 # Grafana
+    http://localhost:8080 # cAdvisor
+    http://localhost:9090 # Prometheus
