@@ -1,8 +1,12 @@
+import pytest
+
+def test_test():
+    assert True
+
 ''' import os
 import re
 import mock
 import json
-import pytest
 from flask import url_for
 from pytest_flask.fixtures import client
 from webserver.app import create_app

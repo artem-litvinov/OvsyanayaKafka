@@ -9,8 +9,7 @@ from aioprometheus import Service
 
 loop = asyncio.get_event_loop()
 
-async def start_monitor():
-    svr = Service(loop=loop)
+async def start_monitor(svr):
     await svr.start(port=8000)
 
 if __name__ == '__main__':
@@ -21,9 +20,16 @@ if __name__ == '__main__':
         logger.error("KeyError! Please set WEBSERVER_PORT environment variable! Using port 8080")
         WEBSERVER_PORT=8080
     
+    svr = Service(loop=loop)
     app = web.Application()
     setup_routes(app)
 
     aiohttp_jinja2.setup(app, loader=jinja2.PackageLoader('view', 'templates'))
-    web.run_app(app, port=int(WEBSERVER_PORT), host='0.0.0.0')
-    loop.run_until_complete(start_monitor())
+
+    try:
+        loop.run_until_complete(start_monitor(svr))
+        web.run_app(app, port=int(WEBSERVER_PORT), host='0.0.0.0')
+    except KeyboardInterrupt:
+        pass
+    finally:
+        loop.run_until_complete(svr.stop())

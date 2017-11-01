@@ -1,5 +1,10 @@
-''' import boto3
 import pytest
+
+def test_test():
+    assert True
+
+''' 
+import boto3
 
 from kafka.errors import NoBrokersAvailable
 from thrift.TSerialization import serialize

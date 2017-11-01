@@ -7,7 +7,6 @@ from aio_cassandra import create_cassandra
 from aiokafka_consumer import create_consumer
 from kafka_message.ttypes import KafkaMessage
 from thrift.TSerialization import deserialize
-from consumer import Consumer
 from kafka_message.ttypes import KafkaMessage
 
 from thrift.TSerialization import deserialize
@@ -52,13 +51,13 @@ async def kafka_message_handler(session, sns_client, kafka_msg):
     msg = await get_message_data(kafka_msg.id, session)
     if msg is None:
         logging.warning(
-            "Couldn't find message details for message %s", kafka_msg.mid)
+            "Couldn't find message details for message %s", kafka_msg.id)
         return
 
     user = await get_user_data(msg.uid, session)
     if user is None:
         logging.warning(
-            "Couldn't find user details for message %s", msg.uid)
+            "Couldn't find user details for user %s", msg.uid)
         return
     
     print("send_msg(sns_client, %s, %s)" % (user.contact, msg.text))

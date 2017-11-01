@@ -1,10 +1,13 @@
 import time
 import os, sys
+import asyncio
 from aiohttp import web
 from aioprometheus import Service, Summary, timer
 
 sys.path.append(os.path.join(sys.path[0], '../tools'))
 from tools.aio_cassandra import create_cassandra
+
+loop = asyncio.get_event_loop()
 
 cassandra = create_cassandra()
 cassandra.connect(keyspace='users')
