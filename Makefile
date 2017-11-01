@@ -3,6 +3,8 @@
 install:
 	pipenv install
 
+thrift: thrift_for_consumer thrift_for_webserver
+
 thrift_for_consumer:
 	thrift -r -out consumer --gen py thrift/kafka_message.thrift
 
