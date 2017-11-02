@@ -1,4 +1,4 @@
-import os
+import os, sys
 import logging
 import asyncio
 import jinja2
@@ -7,10 +7,15 @@ from aiohttp import web
 from routes import setup_routes
 from aioprometheus import Service
 
+sys.path.append(os.path.join(sys.path[0], '../tools'))
+from tools.metrics import METRICS
+
 loop = asyncio.get_event_loop()
 
 async def start_monitor(svr):
     await svr.start(port=8000)
+    for metric in METRICS:
+        svr.registry.register(metric)
 
 if __name__ == '__main__':
     logger = logging.getLogger(__name__)
